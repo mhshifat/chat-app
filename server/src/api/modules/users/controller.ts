@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "./entity"
 import { UserService } from "./service";
 import { LoginBody, RegisterBody } from "./types";
 import { RequestResponse } from "../../../utils/response";
