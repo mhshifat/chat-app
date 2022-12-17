@@ -1,0 +1,31 @@
+.label {
+  width: 100%;
+  height: auto;
+}
+
+.label > span {
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.8;
+  color: var(--secondaryTextColor);
+}
+
+.inverted {
+  background: var(--primaryBgColor);
+  border-radius: var(--radius);
+}
+
+.inverted > span {
+  padding: calc(var(--spacing) / 3) calc(var(--spacing) / 2) 0 calc(var(--spacing) / 2);
+  line-height: 1;
+}
+
+.inverted > input {
+  border: none;
+  padding-top: 0;
+}
+
+.inverted > input:focus {
+  border: none;
+  outline: none;
+}

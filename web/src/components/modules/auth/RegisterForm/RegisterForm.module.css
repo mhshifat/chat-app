@@ -1,0 +1,47 @@
+.registerForm {
+  width: 100%;
+  max-width: var(--maxElementSize);
+  margin: 0 auto;
+  background: var(--secondaryBgColor);
+  border-radius: var(--radius);
+  padding: var(--spacing);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.registerForm > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.registerForm > button {
+  padding: 1em 1.5em;
+  height: auto;
+}
+
+.registerForm > header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 1.5em 2em;
+}
+
+.registerForm > header > h3 {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.registerForm > header > p {
+  max-width: 35ch;
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--secondaryTextColor);
+}
+
+.registerForm > header > span > svg {
+  font-size: 2em;
+}

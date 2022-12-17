@@ -1,0 +1,21 @@
+.button {
+  width: 100%;
+  height: var(--defaultElementHeight);
+  border: none;
+  outline: none;
+  border-radius: var(--radius);
+  background: var(--primaryBgColor);
+  border: 1px solid var(--primaryBgColor);
+  padding: calc(var(--spacing) / 3) calc(var(--spacing) / 2);
+  font-size: 1.5rem;
+  color: var(--primaryTextColor);
+  transition: all 250ms ease-in;
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.button:hover {
+  color: var(--secondaryTextColor);
+  border: 1px solid var(--secondaryTextColor);
+}

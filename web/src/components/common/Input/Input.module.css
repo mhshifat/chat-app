@@ -1,0 +1,18 @@
+.input {
+  width: 100%;
+  max-width: var(--maxElementSize);
+  height: var(--defaultElementHeight);
+  border: none;
+  outline: none;
+  border-radius: calc(var(--radius) / 2);
+  background: transparent;
+  border: 1px solid var(--primaryBgColor);
+  padding: calc(var(--spacing) / 3) calc(var(--spacing) / 2);
+  font-size: 1.5rem;
+  color: var(--secondaryTextColor);
+  transition: all 250ms ease-in;
+}
+
+.input:focus {
+  border: 1px solid var(--secondaryTextColor);
+}
