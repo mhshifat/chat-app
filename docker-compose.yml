@@ -6,7 +6,12 @@ services:
       context: ./server
       dockerfile: Dockerfile
     environment:
-      - PORT=8000
+      PORT: 8000
+      MYSQL_DATABASE: 'chat-app'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+      DB_HOST: "mysql"
     ports:
       - 8000:8000
     volumes:
