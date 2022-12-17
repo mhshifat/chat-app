@@ -14,3 +14,11 @@ export class ServerError extends AppError {
     Object.setPrototypeOf(this, ServerError.prototype);
   }
 }
+
+export class HttpError extends AppError {
+  constructor(public statusCode: number, public message: string) {
+    super(message);
+
+    Object.setPrototypeOf(this, HttpError.prototype);
+  }
+}

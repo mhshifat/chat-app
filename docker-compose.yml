@@ -12,6 +12,8 @@ services:
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
       DB_HOST: "mysql"
+      JWT_SECRET: "my-super-secret"
+      COOKIE_SECRET: "my-super-secret"
     ports:
       - 8000:8000
     volumes:
