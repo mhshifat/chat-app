@@ -6,7 +6,7 @@ services:
       context: ./web
       dockerfile: Dockerfile
     environment:
-      API_SERVER: "api"
+      REACT_APP_API_SERVER: "localhost"
     ports:
       - 3000:3000
     volumes:
@@ -31,6 +31,7 @@ services:
       DB_HOST: "mysql"
       JWT_SECRET: "my-super-secret"
       COOKIE_SECRET: "my-super-secret"
+      CLIENT_ORIGIN: "http://localhost:3000"
     ports:
       - 8000:8000
     volumes:

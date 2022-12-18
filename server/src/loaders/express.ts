@@ -11,7 +11,8 @@ export function createExpressApp() {
   
   app.use([
     cors({
-      origin: "*"
+      origin: appConfig.CLIENT_ORIGIN,
+      credentials: true
     }),
     express.json(),
     express.urlencoded({ extended: false }),

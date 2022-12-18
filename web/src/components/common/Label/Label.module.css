@@ -29,3 +29,7 @@
   border: none;
   outline: none;
 }
+
+.error > span {
+  color: var(--dangerColor);
+}
