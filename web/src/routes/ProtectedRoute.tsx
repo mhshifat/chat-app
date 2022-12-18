@@ -10,13 +10,12 @@ interface ProtectedRouteProps {
 export default function ProtectedRoute({ type = 'private', children }: PropsWithChildren<ProtectedRouteProps>) {
   const { loading, isLoggedIn, user } = useSelector((state: AppState) => state.authSlice);
   
-  
   if (loading) return <p>Loading...</p>;
   if (type === "public" && isLoggedIn && user?.id) {
     return <Navigate to="/dashboard" replace />;
   }
   if (type === "private" && !isLoggedIn && !user?.id) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (

@@ -1,0 +1,58 @@
+.chatHandle {
+  width: 60px;
+  height: 100vh;
+  border-right: 1px solid var(--secondaryBgColor);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatHandle__profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--secondaryBgColor);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.chatHandle__profile > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chatHandle__links {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 10px 0;
+  gap: 10px;
+}
+
+.chatHandle__links > li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 250ms ease-in;
+  border-radius: 50%;
+}
+
+.chatHandle__links > li:hover {
+  background: var(--secondaryBgColor);
+}
+
+.chatHandle__links > li > svg {
+  font-size: 1.6em;
+}
+
+.chatHandle__ySpacing {
+  margin: 15px 0;
+}
+
+.chatHandle__mtAuto {
+  margin-top: auto;
+}

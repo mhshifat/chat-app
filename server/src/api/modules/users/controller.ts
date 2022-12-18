@@ -5,7 +5,7 @@ import { RequestResponse } from "../../../utils/response";
 
 export const UserController = {
   async getMe(req: Request, res: Response, next: NextFunction) {
-    return RequestResponse.setResponse(res).setStatusCode(200).setData(req.currentUser).success();
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(req.currentUser || {}).success();
   },
   async getAll(req: Request, res: Response, next: NextFunction) {
     const docs = await UserService.findAll();
@@ -23,6 +23,6 @@ export const UserController = {
   },
   async signOut(req: Request<any, any, LoginBody>, res: Response, next: NextFunction) {
     req.session = null;
-    return RequestResponse.setResponse(res).setStatusCode(200).setData(null).success();
+    return RequestResponse.setResponse(res).setStatusCode(200).setData({}).success();
   },
 }

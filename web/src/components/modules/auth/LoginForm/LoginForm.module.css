@@ -45,3 +45,26 @@
 .loginForm > header > span > svg {
   font-size: 2em;
 }
+
+.loginForm__users {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 15px 0;
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.loginForm__users > li {
+  cursor: pointer;
+  background: transparent;
+  outline: none;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--secondaryTextColor);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
