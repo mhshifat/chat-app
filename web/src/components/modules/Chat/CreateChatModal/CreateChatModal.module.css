@@ -1,0 +1,18 @@
+.createChatModal {
+  width: 100%;
+  min-width: var(--maxElementSize);
+}
+
+.createChatModal > h3 {
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.8;
+  color: var(--secondaryTextColor);
+  margin-bottom: 1em;
+}
+
+.createChatModal > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

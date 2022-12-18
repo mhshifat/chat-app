@@ -5,6 +5,8 @@ import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { signOutLoggedInUserThunk } from "../../../../store/authSlice";
 import { AppDispatch } from "../../../../store";
+import Modal from "../../../common/Modal/Modal";
+import CreateChatModal from "../CreateChatModal/CreateChatModal";
 
 export default function ChatHandle() {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +22,11 @@ export default function ChatHandle() {
 
       <ul className={`${styles.chatHandle__links} ${styles.chatHandle__ySpacing}`}>
         <li>
-          <BiMessageMinus />
+          <Modal
+            modalBody={<CreateChatModal />}
+          >
+            <BiMessageMinus />
+          </Modal>
         </li>
       </ul>
 

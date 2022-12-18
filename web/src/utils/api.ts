@@ -2,6 +2,8 @@ import axios from "axios";
 import { RegisterFormValues } from "../components/modules/auth/RegisterForm/RegisterForm";
 import { LoginFormValues } from "../components/modules/auth/LoginForm/LoginForm";
 import { UserDocument } from "../store/authSlice";
+import { CreateConversationFormValues } from "../components/modules/Chat/CreateChatModal/CreateChatModal";
+import { ConversationDocument } from "../store/conversationSlice";
 
 const { REACT_APP_API_SERVER } = process.env;
 export const httpClient = axios.create({
@@ -23,3 +25,7 @@ export const registerUser = (values: RegisterFormValues) => httpClient
   .post<HttpResponse<UserDocument>>("/api/users/register", values);
 export const loginUser = (values: LoginFormValues) => httpClient
   .post<HttpResponse<UserDocument>>("/api/users/login", values);
+
+// Conversations API
+export const createConversation = (values: CreateConversationFormValues) => httpClient
+  .post<HttpResponse<ConversationDocument>>("/api/conversations", values);

@@ -30,6 +30,16 @@
   outline: none;
 }
 
+.inverted > div {
+  border: none;
+  padding-top: 0;
+}
+
+.inverted > div:focus-within {
+  border: none;
+  outline: none;
+}
+
 .error > span {
   color: var(--dangerColor);
 }
