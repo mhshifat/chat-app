@@ -1,12 +1,11 @@
-import { DataTypes, Model, UUID, UUIDV4 } from "sequelize";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 import { MessageDocument } from "./types";
-import { sequelize } from "../../../loaders/database"
 
-export const Message = sequelize.define<Model<MessageDocument>>("message", {
-  id: {
-    primaryKey: true,
-    type: UUID,
-    defaultValue: UUIDV4
-  },
-  message: DataTypes.STRING,
-});
+@Entity({ name: "messages" })
+export class Message implements MessageDocument {
+  @PrimaryGeneratedColumn()
+  id: string;
+
+  @Column()
+  message: string;
+}

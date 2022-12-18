@@ -1,24 +1,23 @@
 import "../config";
+import "reflect-metadata";
 import { AppError, ServerError } from "../utils/errors";
 import { createExpressApp } from "./express";
-import { connectDatabase } from "./database";
+import { AppDataSource } from "./database";
 import { appConfig } from "../config";
-import { Sequelize, Error } from "sequelize";
 import http from "http";
 import net from "net";
+import { ConnectionNotFoundError } from "typeorm";
 
 export const Loaders = (() => {
   let server: http.Server;
-  let sequelize: Sequelize;
 
   return {
     async loadDatabase() {
       try {
-        sequelize = await connectDatabase();
-        await sequelize.authenticate();
+        await AppDataSource.initialize();
         console.log('Connection has been established successfully.');
       } catch (err) {
-        if (err instanceof Error) {
+        if (err instanceof ConnectionNotFoundError) {
           throw new ServerError(500, err.message);
         }
       }
@@ -39,7 +38,6 @@ export const Loaders = (() => {
         
         if (err instanceof AppError) {
           console.log("Got Error", err.message);
-          sequelize?.connectionManager.close()
           server?.close();
           process.exit(1);
         }
