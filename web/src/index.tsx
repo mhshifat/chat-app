@@ -5,6 +5,7 @@ import Routes from './routes';
 import { Provider } from "react-redux";
 import { store } from './store';
 import { Toaster } from 'react-hot-toast';
+import SocketProvider from './providers/socket';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,7 +17,9 @@ root.render(
         position="bottom-center"
         reverseOrder={false}
       />
-      <Routes />
+      <SocketProvider>
+        <Routes />
+      </SocketProvider>
     </Provider>
   </React.StrictMode>
 );

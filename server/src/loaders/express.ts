@@ -2,11 +2,21 @@ import "express-async-errors";
 import express from "express";
 import cors from "cors";
 import session from "cookie-session";
+import { Server } from "socket.io";
+import http from "http";
 import { routes } from "../api"
 import { appConfig } from "../config";
+import { handleSocketEvents } from "../utils/events";
 
 export function createExpressApp() {
   const app = express();
+  const server = http.createServer(app);
+  const io = new Server(server, {
+    cors: {
+      credentials: true,
+      origin: appConfig.CLIENT_ORIGIN
+    }
+  });
   app.set('trust proxy', 1);
   
   app.use([
@@ -26,5 +36,15 @@ export function createExpressApp() {
     routes(),
   ]);
 
-  return app;
+  io.on('connection', (socket) => {
+    console.log(socket.id + ' user connected');
+
+    handleSocketEvents(socket);
+
+    socket.on('disconnect', () => {
+      console.log(socket.id + ' user disconnected');
+    });
+  });
+
+  return server;
 } 
