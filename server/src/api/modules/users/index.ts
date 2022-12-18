@@ -9,7 +9,8 @@ userRouter.route("/")
 .get(UserController.getAll);
 
 userRouter.route("/me")
-.get(UserController.getMe);
+.get(UserController.getMe)
+.delete(UserController.signOut);
 
 userRouter.route("/login")
 .post(

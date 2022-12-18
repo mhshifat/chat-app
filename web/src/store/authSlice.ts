@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { RegisterFormValues } from './../components/modules/auth/RegisterForm/RegisterForm';
-import { fetchLoggedInUser, registerUser } from '../utils/api';
+import { LoginFormValues } from './../components/modules/auth/LoginForm/LoginForm';
+import { fetchLoggedInUser, registerUser, loginUser, signOutLoggedInUser } from '../utils/api';
 
 export interface UserDocument {
   id?: string;
@@ -24,7 +25,9 @@ const initialState: AuthState = {
 }
 
 export const fetchLoggedInUserThunk = createAsyncThunk("auth/me", async () => fetchLoggedInUser());
+export const signOutLoggedInUserThunk = createAsyncThunk("auth/signOut", async () => signOutLoggedInUser());
 export const registerUserThunk = createAsyncThunk("auth/register", async (values: RegisterFormValues) => registerUser(values));
+export const loginUserThunk = createAsyncThunk("auth/login", async (values: LoginFormValues) => loginUser(values));
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -59,6 +62,34 @@ export const authSlice = createSlice({
       state.loading = false;
       state.isLoggedIn = false;
       state.user = null;
+    })
+    .addCase(loginUserThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(loginUserThunk.fulfilled, (state, action) => {
+      if (action.payload.data.success) {
+        state.loading = false;
+        state.isLoggedIn = true;
+        state.user = action.payload.data.result;
+      }
+    })
+    .addCase(loginUserThunk.rejected, (state) => {
+      state.loading = false;
+      state.isLoggedIn = false;
+      state.user = null;
+    })
+    .addCase(signOutLoggedInUserThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(signOutLoggedInUserThunk.fulfilled, (state, action) => {
+      if (action.payload.data.success) {
+        state.loading = false;
+        state.isLoggedIn = false;
+        state.user = null;
+      }
+    })
+    .addCase(signOutLoggedInUserThunk.rejected, (state) => {
+      state.loading = false;
     })
 })
 

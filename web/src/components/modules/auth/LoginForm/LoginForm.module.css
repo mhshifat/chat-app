@@ -1,0 +1,47 @@
+.loginForm {
+  width: 100%;
+  max-width: var(--maxElementSize);
+  margin: 0 auto;
+  background: var(--secondaryBgColor);
+  border-radius: var(--radius);
+  padding: var(--spacing);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loginForm > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.loginForm > button {
+  padding: 1em 1.5em;
+  height: auto;
+}
+
+.loginForm > header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 1.5em 2em;
+}
+
+.loginForm > header > h3 {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.loginForm > header > p {
+  max-width: 35ch;
+  text-align: center;
+  font-size: 1.5rem;
+  color: var(--secondaryTextColor);
+}
+
+.loginForm > header > span > svg {
+  font-size: 2em;
+}

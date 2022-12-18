@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes as DomRoutes } from "react-router-dom";
-import { RegisterPage } from "../pages";
+import { LoginPage, RegisterPage } from "../pages";
 import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
@@ -17,7 +17,7 @@ export default function Routes() {
       <Suspense fallback={<p>Loading...</p>}>
         <DomRoutes>
           <Route path="/">
-            <Route index element={<p>Welcome</p>} />
+            <Route index element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Route>
         </DomRoutes>

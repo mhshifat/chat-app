@@ -21,4 +21,8 @@ export const UserController = {
     req.session = { token };
     return RequestResponse.setResponse(res).setStatusCode(200).setData(user).success();
   },
+  async signOut(req: Request<any, any, LoginBody>, res: Response, next: NextFunction) {
+    req.session = null;
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(null).success();
+  },
 }
