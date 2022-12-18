@@ -4,6 +4,7 @@ import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
 import { fetchLoggedInUserThunk } from "../store/authSlice";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function Routes() {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,8 +18,16 @@ export default function Routes() {
       <Suspense fallback={<p>Loading...</p>}>
         <DomRoutes>
           <Route path="/">
-            <Route index element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+            <Route index element={(
+              <ProtectedRoute type="public">
+                <LoginPage />
+              </ProtectedRoute>
+            )} />
+            <Route path="/register" element={(
+              <ProtectedRoute type="public">
+                <RegisterPage />
+              </ProtectedRoute>
+            )} />
           </Route>
         </DomRoutes>
       </Suspense>
