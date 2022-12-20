@@ -5,43 +5,43 @@ import { User } from "./entity"
 import { JwtPayload, LoginBody, RegisterBody, UserDocument } from "./types";
 import { HttpError } from "../../../utils/errors";
 import { appConfig } from "../../../config";
+import { FindOptionsWhere } from "typeorm";
 
 export const UserService = {
   async findAll() {
-    return User.findAll();
+    return User.find({});
   },
-  async findAndThrowError(query: FindOptions<UserDocument>) {
-    const doc = await User.findOne(query);
+  async findAndThrowError(query: FindOptionsWhere<User>) {
+    const doc = await User.findOne({ where: query });
     if (!doc) throw new HttpError(404, "User not found!");
     return doc;
   },
-  async findOne(query: FindOptions<UserDocument>) {
-    const doc = await User.findOne(query);
+  async findOne(query: FindOptionsWhere<User>) {
+    const doc = await User.findOne({ where: query });
     return doc;
   },
   async registerUser(user: RegisterBody) {
     const doc = await User.findOne({ where: { email: user.email } });
     if (doc) throw new HttpError(409, "User already exist!");
     const hashPass = await bcrypt.hash(user.password, 10);
-    const newUser = await User.create({
+    const newUser = User.create({
       ...user,
       password: hashPass
     });
-    const userJson = newUser.toJSON();
-    const pauload: JwtPayload = { id: userJson.id! }
-    const token = jwt.sign(pauload, appConfig.jwtSecret);
-    delete userJson.password;
-    return { token, user: userJson }
+    await newUser.save();
+    const payload: JwtPayload = { id: newUser.id! }
+    const token = jwt.sign(payload, appConfig.jwtSecret);
+    delete newUser.password;
+    return { token, user: newUser }
   },
   async loginUser(user: LoginBody) {
     const doc = await User.findOne({ where: { email: user.email } });
     if (!doc) throw new HttpError(400, "Invalid request!");
-    const userJson = doc.toJSON();
-    const isPwdMatched = await bcrypt.compare(user.password, userJson.password!);
+    const isPwdMatched = await bcrypt.compare(user.password, doc.password!);
     if (!isPwdMatched) throw new HttpError(400, "Invalid request!");
-    const pauload: JwtPayload = { id: userJson.id! }
-    const token = jwt.sign(pauload, appConfig.jwtSecret);
-    delete userJson.password;
-    return { token, user: userJson }
+    const payload: JwtPayload = { id: doc.id! }
+    const token = jwt.sign(payload, appConfig.jwtSecret);
+    delete doc.password;
+    return { token, user: doc }
   },
 }

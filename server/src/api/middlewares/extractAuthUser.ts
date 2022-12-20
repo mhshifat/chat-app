@@ -11,9 +11,9 @@ export async function extractAuthUser(req: Request, res: Response, next: NextFun
   try {
     const tokenPayload = jwt.verify(token, appConfig.jwtSecret) as JwtPayload;
     if (!tokenPayload) return next();
-    const user = await UserService.findOne({ where: { id: tokenPayload.id } });
+    const user = await UserService.findOne({ id: tokenPayload.id });
     if (!user) return next();
-    req.currentUser = user.toJSON();
+    req.currentUser = user;
     return next();
   } catch (err) {
     return next();

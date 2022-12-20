@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 import { MessageDocument } from "./types";
 
 @Entity({ name: "messages" })
-export class Message implements MessageDocument {
+export class Message extends BaseEntity  {
   @PrimaryGeneratedColumn()
   id: string;
 

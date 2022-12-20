@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 import { UserDocument } from "./types";
 
 @Entity({ name: "users" })
-export class User implements UserDocument {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: string;
 
@@ -16,5 +16,5 @@ export class User implements UserDocument {
   email: string;
 
   @Column()
-  password: string;
+  password?: string;
 }
