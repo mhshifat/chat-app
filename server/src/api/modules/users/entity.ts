@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { UserDocument } from "./types";
+import { Conversation } from "../conversations/entity";
+import { Message } from "../messages/entity";
 
 @Entity({ name: "users" })
 export class User extends BaseEntity {
@@ -17,4 +19,16 @@ export class User extends BaseEntity {
 
   @Column()
   password?: string;
+
+  @OneToMany(() => Conversation, conversation => conversation.creator)
+  conversations: Conversation[];
+
+  @OneToMany(() => Message, msg => msg.writter)
+  messages: Message[];
+
+  @CreateDateColumn()
+  created_at: Date
+
+  @UpdateDateColumn()
+  updated_at: Date
 }

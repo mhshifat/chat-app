@@ -11,7 +11,7 @@ function Select({ options, ...restProps }: SelectProps, ref: ForwardedRef<HTMLSe
       <select {...restProps} ref={ref}>
         <option value="">Select</option>
         {options?.map(({ label, value }) => (
-          <option value={value}>{label}</option>
+          <option key={label} value={value}>{label}</option>
         ))}
       </select>
     </div>

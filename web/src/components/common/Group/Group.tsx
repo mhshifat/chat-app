@@ -6,9 +6,10 @@ interface GroupProps {
   justify?: "center" | "flex-start" | "flex-end";
   align?: "center" | "flex-start" | "flex-end";
   height?: string;
+  flex?: string;
 }
 
-export default function Group({ direction = "row", justify = "center", align = "center", height, children }: PropsWithChildren<GroupProps>) {
+export default function Group({ direction = "row", justify = "center", align = "center", height, flex, children }: PropsWithChildren<GroupProps>) {
   return (
     <div 
       className={styles.group}
@@ -16,7 +17,8 @@ export default function Group({ direction = "row", justify = "center", align = "
         flexDirection: direction,
         justifyContent: justify,
         alignItems: align,
-        height: height || "100%"
+        height: height || "100%",
+        ...flex?{flex}:{}
       }}
     >
       {children}

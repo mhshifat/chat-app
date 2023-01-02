@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes as DomRoutes } from "react-router-dom";
-import { DashboardPage, LoginPage, RegisterPage } from "../pages";
+import { ConversationPage, DashboardPage, LoginPage, RegisterPage } from "../pages";
 import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store";
@@ -31,6 +31,11 @@ export default function Routes() {
             <Route path="/dashboard" element={(
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            )} />
+            <Route path="/conversations/:id" element={(
+              <ProtectedRoute>
+                <ConversationPage />
               </ProtectedRoute>
             )} />
           </Route>

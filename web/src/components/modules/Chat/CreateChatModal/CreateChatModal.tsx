@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../../../store";
 import { createConversationThunk } from "../../../../store/conversationSlice";
 import { promisedToast } from "../../../../utils/toast";
+import { useNavigate } from "react-router-dom";
 
 interface CreateChatModalProps {
   isOpen?: boolean;
@@ -21,27 +22,41 @@ export interface CreateConversationFormValues {
   type: string;
   email: string;
   message: string;
+  name?: string;
 }
 
 const schema = yup.object().shape({
   type: yup.string().required(),
-  email: yup.string().email().required(),
+  email: yup.string().required(),
   message: yup.string().required(),
+  name: yup
+  .string()
+  .when('type', {
+      is: "group",
+      then: yup.string().required(),
+  }),
 });
 export default function CreateChatModal({ isOpen, closeModal }: CreateChatModalProps) {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { loading } = useSelector((state: AppState) => state.conversationSlice);
-  const { register, handleSubmit, formState: { errors } } = useForm<CreateConversationFormValues>({
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<CreateConversationFormValues>({
     resolver: yupResolver(schema),
     mode: "onChange",
     reValidateMode: "onChange"
   });
 
   const createConversation = useCallback(async (values: CreateConversationFormValues) => {
-    await promisedToast(
-      dispatch(createConversationThunk(values))
-    )
-  }, [dispatch]);
+    try {
+      const res = await promisedToast(
+        dispatch(createConversationThunk(values)).unwrap()
+      );
+      closeModal?.();
+      navigate(`/conversations/${res?.data?.result?.id}`);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [dispatch, closeModal, navigate]);
   return (
     <form className={styles.createChatModal} onSubmit={handleSubmit(createConversation)}>
       <h3>Send Custom Message</h3>
@@ -56,6 +71,11 @@ export default function CreateChatModal({ isOpen, closeModal }: CreateChatModalP
             {...register("type")}
           />
         </Label>
+        {watch("type") === "group" && (
+          <Label title="Name" inverted error={errors.name?.message}>
+            <Input {...register("name")} />
+          </Label>
+        )}
         <Label title="Email" inverted error={errors.email?.message}>
           <Input {...register("email")} />
         </Label>

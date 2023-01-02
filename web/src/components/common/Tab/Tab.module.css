@@ -1,0 +1,28 @@
+.tab {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) / 1.2);
+  flex-wrap: wrap;
+}
+
+.tab > span {
+  padding: .4em 1.2em;
+  background: var(--secondaryBgColor);
+  border-radius: calc(var(--radius) / 2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  line-height: 1.3;
+  cursor: pointer;
+  color: var(--secondaryTextColor);
+}
+
+.tab__active {
+  color: var(--primaryTextColor) !important;
+}
+
+.tab__center {
+  justify-content: center !important;
+}

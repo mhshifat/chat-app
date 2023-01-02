@@ -4,6 +4,9 @@ import { ReactElement, cloneElement, useState } from 'react';
 import { useCallback } from 'react';
 import { PropsWithChildren } from 'react';
 
+// @ts-ignore
+ReactModal.setAppElement("#root")
+
 const customStyles = {
   content: {
     top: '50%',

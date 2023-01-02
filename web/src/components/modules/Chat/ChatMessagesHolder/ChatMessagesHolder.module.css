@@ -1,0 +1,236 @@
+.chatMessagesHolder {
+  width: 100%;
+  height: 100%;
+  background: var(--secondaryBgColor);
+  display: flex;
+  flex-direction: column;
+}
+
+.chatMessagesHolderHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--spacing) / 2);
+  background: var(--primaryBgColor);
+}
+
+.chatMessagesHolderHeader > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chatMessagesHolderHeader > span > img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.chatMessagesHolderHeader > span > h3 {
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.chatMessagesHolderHeader > ul {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  list-style: none;
+}
+
+.chatMessagesHolderHeader > ul > li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.chatMessagesHolderHeader > ul > li > svg {
+  font-size: 2rem;
+}
+
+.chatMessagesHolderInput {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  padding: calc(var(--spacing) / 2);
+  list-style: none;
+  background: var(--primaryBgColor);
+}
+
+.chatMessagesHolderInput > li:nth-child(2) {
+  flex: 1;
+  background: var(--secondaryBgColor);
+  height: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.chatMessagesHolderInput > li:nth-child(2) > input::placeholder,
+.chatMessagesHolderInput > li:nth-child(2) > input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--secondaryTextColor);
+}
+
+.chatMessagesHolderInput > li:nth-child(2) > input {
+  padding: 0 calc(var(--spacing) / 2);
+}
+
+.chatMessagesHolderInput > li:first-child,
+.chatMessagesHolderInput > li:last-child {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatMessagesHolderInput > li:first-child > svg,
+.chatMessagesHolderInput > li:last-child > svg {
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.chatMessagesHolderContent {
+  flex: 1;
+  padding: calc(var(--spacing) / 2);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.chatMessagesHolderContent::-webkit-scrollbar {
+  width: 10px;
+  background: var(--secondaryBgColor);
+}
+
+.chatMessagesHolderContent::-webkit-scrollbar-thumb {
+  width: 100%;
+  background: var(--primaryBgColor);
+  border-radius: 9999999px;
+}
+
+.chatMessagesHolderSingleMessage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chatMessagesHolderMultiMessage {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.chatMessagesHolderMultiMessage > span > img,
+.chatMessagesHolderSingleMessage > span > img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.chatMessagesHolderMultiMessage > span > h3,
+.chatMessagesHolderSingleMessage > span > h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chatMessagesHolderMultiMessage > span > h3 > small,
+.chatMessagesHolderSingleMessage > span > h3 > small {
+  color: var(--secondaryTextColor);
+}
+
+.chatMessagesHolderMultiMessage > span > p,
+.chatMessagesHolderSingleMessage > span > p {
+  font-size: 1.4rem;
+  line-height: 1.4;
+  font-weight: normal;
+}
+
+.chatMessagesHolderMultiMessage > span > p + p {
+  margin-top: 5px;
+}
+
+.chatMessagesHolderMultiMessage > span,
+.chatMessagesHolderSingleMessage > span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.chatMessagesHolderMultiMessage > span:last-of-type,
+.chatMessagesHolderSingleMessage > span:last-of-type {
+  flex: 1;
+}
+
+.chatMessagesHolderText__menu {
+  position: fixed;
+  top: 500px;
+  left: 500px;
+  width: max-content;
+  height: auto;
+  background: var(--primaryBgColor);
+  padding: calc(var(--spacing) / 2);
+  border-radius: var(--radius);
+  list-style: none;
+}
+
+.chatMessagesHolderText__menu > li {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.5;
+  padding: 3px 5px;
+  cursor: pointer;
+  color: var(--secondaryTextColor);
+  transition: all 250ms ease-in;
+}
+
+.chatMessagesHolderText__menu > li:hover {
+  color: var(--primaryTextColor);
+}
+
+.chatMessagesHolderText__menuWrapper {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+}
+
+.chatMessagesHolderText__editableInput {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0;
+}
+
+.chatMessagesHolderText__editableInput > input {
+  background: var(--primaryBgColor);
+  height: auto;
+  border: none;
+  outline: none;
+  padding: 1px 10px;
+  color: var(--secondaryTextColor);
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 1.8;
+  border-radius: var(--radius);
+}
+
+.chatMessagesHolderText__editableInput > small {
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--secondaryTextColor);
+}

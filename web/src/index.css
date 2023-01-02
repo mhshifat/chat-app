@@ -8,6 +8,7 @@
 
   /* Size */
   --maxElementSize: 500px;
+  --sidebarSize: 250px;
   --defaultElementHeight: 38px;
 
   --radius: 10px;

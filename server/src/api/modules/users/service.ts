@@ -1,4 +1,3 @@
-import { FindOptions } from "sequelize";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "./entity"
@@ -8,8 +7,8 @@ import { appConfig } from "../../../config";
 import { FindOptionsWhere } from "typeorm";
 
 export const UserService = {
-  async findAll() {
-    return User.find({});
+  async findAll(query: FindOptionsWhere<User>) {
+    return User.find({ where: query });
   },
   async findAndThrowError(query: FindOptionsWhere<User>) {
     const doc = await User.findOne({ where: query });

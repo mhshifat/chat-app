@@ -57,12 +57,12 @@ services:
     expose:
       - '3306'
     volumes:
-      - my-db:/var/lib/mysql
+      - my-dbs:/var/lib/mysql
     networks:
       - dev
 
 volumes:
-  my-db:
+  my-dbs:
 
 networks:
   dev:

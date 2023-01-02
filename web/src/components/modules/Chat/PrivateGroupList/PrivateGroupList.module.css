@@ -1,0 +1,53 @@
+.privateGroupList {
+  width: 100%;
+  height: auto;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.privateGroupList > li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: .8em 0;
+  cursor: pointer;
+  transition: all 250ms ease-in;
+}
+
+.privateGroupList > li:hover {
+  opacity: .5;
+}
+
+.privateGroupList > li + li {
+  border-top: 1px solid var(--secondaryBgColor);
+}
+
+.privateGroupList > li > img {
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.privateGroupList > li > span {
+  color: var(--secondaryTextColor);
+  flex: 1;
+}
+
+.privateGroupList > li > span > h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.privateGroupList > li > span > p {
+  font-size: 1.3rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.privateGroupList__new > span {
+  color: var(--primaryTextColor) !important;
+}

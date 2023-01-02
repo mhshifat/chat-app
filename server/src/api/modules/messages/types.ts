@@ -1,8 +1,10 @@
 import { ConversationDocument } from '../conversations/types';
+import { UserDocument } from '../users/types';
 
 export interface CreateMessageBody {
   conversationId: string;
   message: string;
+  writter?: UserDocument;
 }
 
 export interface MessageDocument {
@@ -11,4 +13,8 @@ export interface MessageDocument {
   updated_at?: string;
   message: string;
   conversation?: ConversationDocument;
+}
+
+export interface GetConversationMessagesParams {
+  conversationId: string;
 }

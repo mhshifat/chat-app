@@ -6,7 +6,8 @@ import { CreateConversationValidationSchema } from "./validations";
 export const conversationRouter = Router();
 
 conversationRouter.route("/")
-.post(
-  [validateRequest(CreateConversationValidationSchema)],
-  ConversationController.createConversation
-);
+  .get(ConversationController.getConversations)
+  .post(
+    [validateRequest(CreateConversationValidationSchema)],
+    ConversationController.createConversation
+  );

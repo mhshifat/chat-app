@@ -1,0 +1,37 @@
+.chatTypesSidebar {
+  max-width: var(--sidebarSize);
+  width: 100%;
+  background: transparent;
+  border-right: 1px solid var(--secondaryBgColor);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: var(--spacing);
+}
+
+.chatTypesSidebar__search {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--secondaryBgColor);
+  padding: .5em;
+  border-radius: calc(var(--radius) / 2);
+  color: var(--secondaryTextColor);
+}
+
+.chatTypesSidebar__search > svg {
+  font-size: 1.4rem;
+}
+
+.chatTypesSidebar__search > input {
+  border: none;
+  outline: none;
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  color: var(--primaryTextColor);
+  font-size: 1.4rem;
+}
