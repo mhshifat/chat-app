@@ -59,5 +59,27 @@ export const MessageService = {
       await conversations[0].save();
     }
     return updatedMsg;
-  }
+  },
+  async deleteMessage(id: Message["id"], authUser: UserDocument) {
+    const message = await Message
+      .createQueryBuilder("message")
+      .leftJoinAndSelect("message.conversation", "conversation")
+      .where("message.id = :id", { id })
+      .andWhere("message.writter.id = :writterId", { writterId: authUser.id })
+      .leftJoinAndSelect("message.writter", "writter")
+      .getOne();
+    if (!message) throw new HttpError(403, "Not authorized");
+    const conversations = await ConversationService.findConversationWhereAuthUserBelongsTo(+message.conversation.id, +authUser.id!);
+    if (conversations?.[0]?.lastMessageSent?.id === message.id) {
+      const lastMessages = await Message
+        .createQueryBuilder("message")
+        .orderBy("created_at", "DESC")
+        .limit(2)
+        .getMany();
+      conversations[0].lastMessageSent = lastMessages[1];
+      await conversations[0].save();
+    }
+    await message.remove();
+    return {...message, id: +id};
+  },
 }

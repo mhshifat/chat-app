@@ -18,4 +18,7 @@ messageRouter.route("/:id")
   .patch(
     [validateRequest(UpdateMessageValidationSchema)],
     MessageController.updateMessage
+  )
+  .delete(
+    MessageController.deleteMessage
   );

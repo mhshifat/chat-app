@@ -43,3 +43,5 @@ export const createMessage = (values: CreateMessageFormValues) => httpClient
   .post<HttpResponse<MessageDocument>>("/api/messages", values);
 export const updateMessage = (id: MessageDocument["id"], values: UpdateMessageFormValues) => httpClient
   .patch<HttpResponse<MessageDocument>>(`/api/messages/${id}`, values);
+export const deleteMessage = (id: MessageDocument["id"]) => httpClient
+  .delete<HttpResponse<MessageDocument>>(`/api/messages/${id}`);

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { RegisterFormValues } from './../components/modules/auth/RegisterForm/RegisterForm';
 import { LoginFormValues } from './../components/modules/auth/LoginForm/LoginForm';
-import { createMessage, getMessages, updateMessage } from '../utils/api';
+import { createMessage, deleteMessage, getMessages, updateMessage } from '../utils/api';
 import { UserDocument } from './authSlice';
 import { ConversationDocument } from './conversationSlice';
 import { CreateMessageFormValues, UpdateMessageFormValues } from '../components/modules/Chat/ChatMessagesHolder/ChatMessagesHolderInput';
@@ -34,6 +34,9 @@ export const getMessagesThunk = createAsyncThunk("message/get", async (params: G
 export const createMessageThunk = createAsyncThunk("message/create", async (values: CreateMessageFormValues) => createMessage(values));
 export const updateMessageThunk = createAsyncThunk("message/update", async ({ id, values }: { id: MessageDocument["id"], values: UpdateMessageFormValues }, { rejectWithValue }) => {
   return updateMessage(id, values).catch(err => rejectWithValue(err?.response?.data?.error))
+});
+export const deleteMessageThunk = createAsyncThunk("message/delete", async (id: MessageDocument["id"], { rejectWithValue }) => {
+  return deleteMessage(id).catch(err => rejectWithValue(err?.response?.data?.error))
 });
 export const messageSlice = createSlice({
   name: 'messages',
@@ -75,6 +78,18 @@ export const messageSlice = createSlice({
       }
     })
     .addCase(updateMessageThunk.rejected, (state) => {
+      state.loading = false;
+    })
+    .addCase(deleteMessageThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(deleteMessageThunk.fulfilled, (state, action) => {
+      if (action.payload.data.success) {
+        state.loading = false;
+        state.messages = state.messages.filter(msg => msg.id !== action.payload.data.result.id);
+      }
+    })
+    .addCase(deleteMessageThunk.rejected, (state) => {
       state.loading = false;
     })
 })

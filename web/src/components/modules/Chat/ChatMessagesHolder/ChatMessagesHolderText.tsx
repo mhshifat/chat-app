@@ -2,7 +2,7 @@ import { useState, useLayoutEffect, KeyboardEvent as KeyboardEventReact } from '
 import styles from "./ChatMessagesHolder.module.css";
 import { PropsWithChildren, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { MessageDocument, updateMessageThunk } from './../../../../store/messageSlice';
+import { MessageDocument, deleteMessageThunk, updateMessageThunk } from './../../../../store/messageSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from '../../../../store';
 import { useRef } from 'react';
@@ -32,7 +32,11 @@ export default function ChatMessagesHolderText({ children, msg }:PropsWithChildr
     if (type === "edit") {
       setShowInput(true);
     }
-  }, []);
+
+    if (type === "delete") {
+      functionsRef.current.dispatch(deleteMessageThunk(msg.id))
+    }
+  }, [msg.id]);
 
   const handleUpdateMessage = useCallback(async (e: KeyboardEventReact<HTMLInputElement>) => {
     const { value } = e.currentTarget;
