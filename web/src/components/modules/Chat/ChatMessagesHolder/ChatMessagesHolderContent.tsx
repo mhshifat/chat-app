@@ -21,7 +21,7 @@ export default function ChatMessagesHolderContent({}:ChatMessagesHolderContentPr
 
   const stucturalMessages = useMemo(() => {
     const newMessages: [string, MessageDocument[]][] = [];
-    messages.forEach((msg, idx, array) => {
+    messages[String(id)]?.forEach((msg, idx, array) => {
       if (!newMessages.length) {
         newMessages.push([msg.writter?.id!, [msg]]);
       } else if (+newMessages.slice(-1)?.[0]?.[0] === +msg.writter?.id!) {
@@ -31,7 +31,7 @@ export default function ChatMessagesHolderContent({}:ChatMessagesHolderContentPr
       }
     });
     return newMessages;
-  }, [messages]);
+  }, [messages, id]);
   console.log({ stucturalMessages });
   return (
     <div className={styles.chatMessagesHolderContent}>

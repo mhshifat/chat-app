@@ -18,12 +18,12 @@ export interface MessageDocument {
 
 export interface MessageState {
   loading: boolean;
-  messages: MessageDocument[];
+  messages: Record<string, MessageDocument[]>;
 }
 
 const initialState: MessageState = {
   loading: false,
-  messages: [],
+  messages: {},
 }
 
 export interface GetMessagesParams {
@@ -41,7 +41,11 @@ export const deleteMessageThunk = createAsyncThunk("message/delete", async (id: 
 export const messageSlice = createSlice({
   name: 'messages',
   initialState,
-  reducers: {},
+  reducers: {
+    addMessage: (state, { payload }) => {
+      state.messages[String(payload.conversation.id)].unshift(payload);
+    }
+  },
   extraReducers: (builder) => builder
     .addCase(getMessagesThunk.pending, (state) => {
       state.loading = true;
@@ -49,7 +53,8 @@ export const messageSlice = createSlice({
     .addCase(getMessagesThunk.fulfilled, (state, action) => {
       if (action.payload.data.success) {
         state.loading = false;
-        state.messages = action.payload.data.result;
+        const newMsgs = action.payload.data.result;
+        state.messages[String(newMsgs[0].conversation?.id)] = newMsgs;
       }
     })
     .addCase(getMessagesThunk.rejected, (state) => {
@@ -61,7 +66,8 @@ export const messageSlice = createSlice({
     .addCase(createMessageThunk.fulfilled, (state, action) => {
       if (action.payload.data.success) {
         state.loading = false;
-        state.messages.unshift(action.payload.data.result);
+        const newMsg = action.payload.data.result;
+        state.messages[String(newMsg.conversation?.id)].unshift(newMsg);
       }
     })
     .addCase(createMessageThunk.rejected, (state) => {
@@ -73,8 +79,9 @@ export const messageSlice = createSlice({
     .addCase(updateMessageThunk.fulfilled, (state, action) => {
       if (action.payload.data.success) {
         state.loading = false;
-        const messageIdx = state.messages.findIndex(msg => msg.id === action.payload.data.result.id);
-        state.messages[messageIdx] = action.payload.data.result;
+        const newMsg = action.payload.data.result;
+        const messageIdx = state.messages[String(newMsg.conversation?.id)].findIndex(msg => msg.id === newMsg.id);
+        state.messages[String(newMsg.conversation?.id)][messageIdx] = action.payload.data.result;
       }
     })
     .addCase(updateMessageThunk.rejected, (state) => {
@@ -86,7 +93,8 @@ export const messageSlice = createSlice({
     .addCase(deleteMessageThunk.fulfilled, (state, action) => {
       if (action.payload.data.success) {
         state.loading = false;
-        state.messages = state.messages.filter(msg => msg.id !== action.payload.data.result.id);
+        const newMsg = action.payload.data.result;
+        state.messages[String(newMsg.conversation?.id)] = state.messages[String(newMsg.conversation?.id)].filter(msg => msg.id !== newMsg.id);
       }
     })
     .addCase(deleteMessageThunk.rejected, (state) => {
@@ -94,5 +102,5 @@ export const messageSlice = createSlice({
     })
 })
 
-export const {} = messageSlice.actions
+export const { addMessage } = messageSlice.actions
 export default messageSlice.reducer;

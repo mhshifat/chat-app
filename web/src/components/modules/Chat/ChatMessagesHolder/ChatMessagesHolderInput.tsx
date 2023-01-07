@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { createMessageThunk } from "../../../../store/messageSlice";
 import { useParams } from 'react-router-dom';
 import { AppDispatch } from "../../../../store";
+import { updateConversation } from "../../../../store/conversationSlice";
 
 interface ChatMessagesHolderInputProps {}
 
@@ -25,7 +26,13 @@ export default function ChatMessagesHolderInput({}:ChatMessagesHolderInputProps)
     dispatch(createMessageThunk({
       message: content,
       conversationId: id
-    }));
+    })).unwrap().then((res) => {
+      const msg = res.data.result;
+      dispatch(updateConversation({
+        ...msg.conversation,
+        lastMessageSent: msg
+      }));
+    });
   }, [dispatch, id]);
 
   return (

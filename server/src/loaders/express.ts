@@ -38,12 +38,7 @@ export function createExpressApp() {
 
   io.on('connection', (socket) => {
     console.log(socket.id + ' user connected');
-
     handleSocketEvents(socket);
-
-    socket.on('disconnect', () => {
-      console.log(socket.id + ' user disconnected');
-    });
   });
 
   return server;

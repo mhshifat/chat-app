@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { MessageService } from "./service";
 import { CreateMessageBody, GetConversationMessagesParams, UpdateMessageBody } from "./types";
 import { RequestResponse } from "../../../utils/response";
+import { eventEmitter } from "../../../utils/events";
 
 export const MessageController = {
   async getConversationMessages(req: Request<any, any, any, GetConversationMessagesParams>, res: Response, next: NextFunction) {
@@ -9,12 +10,13 @@ export const MessageController = {
     return RequestResponse.setResponse(res).setStatusCode(200).setData(docs).success();
   },
   async createMessage(req: Request<any, any, CreateMessageBody>, res: Response, next: NextFunction) {
-    const doc = await MessageService.createMessage({
+    const { message, conversation } = await MessageService.createMessage({
       conversationId: req.body.conversationId,
       message: req.body.message,
       writter: req.currentUser
     });
-    return RequestResponse.setResponse(res).setStatusCode(201).setData(doc).success();
+    eventEmitter.emit("onMessageCreate", { message, conversation });
+    return RequestResponse.setResponse(res).setStatusCode(201).setData(message).success();
   },
   async updateMessage(req: Request<{ id: string }, any, UpdateMessageBody>, res: Response, next: NextFunction) {
     const doc = await MessageService.updateMessage(req.params.id, req.body, req.currentUser!);

@@ -40,7 +40,7 @@ export const MessageService = {
     conversations[0].lastMessageSent = doc;
     const newDoc = await doc.save();
     await conversations[0].save();
-    return newDoc;
+    return { message: newDoc, conversation: conversations[0] };
   },
   async updateMessage(id: Message["id"], body: UpdateMessageBody, authUser: UserDocument) {
     const message = await Message

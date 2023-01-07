@@ -35,6 +35,7 @@ export const ConversationService = {
       .select("conversation", "conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
       .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
+      .leftJoinAndSelect("conversation.users", "allUsers")
       .getMany();
     return docs;
   },
@@ -73,7 +74,7 @@ export const ConversationService = {
       users: [user, ...receipients]
     });
     await newConversation.save()
-    const newMessage = await MessageService.createMessage({
+    const { message: newMessage } = await MessageService.createMessage({
       conversationId: newConversation.id,
       message: body.message,
       writter: user

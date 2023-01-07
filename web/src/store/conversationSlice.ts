@@ -38,7 +38,10 @@ export const conversationSlice = createSlice({
   reducers: {
     setConversationType: (state, { payload }) => {
       state.type = payload
-    }
+    },
+    updateConversation: (state, { payload }) => {
+      state.conversations = state.conversations.map(c => c.id === payload.id ? payload : c);
+    },
   },
   extraReducers: (builder) => builder
     .addCase(getConversationsThunk.pending, (state) => {
@@ -67,5 +70,5 @@ export const conversationSlice = createSlice({
     })
 })
 
-export const { setConversationType } = conversationSlice.actions
+export const { setConversationType, updateConversation } = conversationSlice.actions
 export default conversationSlice.reducer;

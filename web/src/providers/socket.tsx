@@ -9,20 +9,21 @@ const socket = io(`ws://${REACT_APP_SOCKET_URI}:8000`, {
 const SocketContext = createContext<Socket | null>(null)
 export default function SocketProvider({ children }: PropsWithChildren) {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  console.log(`Sopcket ${isConnected ? "connected" : "disconnected"}`);
+  console.log(`Socket ${isConnected ? "connected" : "disconnected"} - ${socket.id}`);
   
   useEffect(() => {
-    socket.on('connect', () => {
+    const socketConnect = () => {
       setIsConnected(true);
-    });
-
-    socket.on('disconnect', () => {
+    }
+    const socketDisconnect = () => {
       setIsConnected(false);
-    });
+    }
+    socket.on('connect', socketConnect);
+    socket.on('disconnect', socketDisconnect);
 
     return () => {
-      socket.off('connect');
-      socket.off('disconnect');
+      socket.off('connect', socketConnect);
+      socket.off('disconnect', socketDisconnect);
     };
   }, []);
 
