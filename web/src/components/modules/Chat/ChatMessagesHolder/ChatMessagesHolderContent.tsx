@@ -12,7 +12,7 @@ interface ChatMessagesHolderContentProps {}
 export default function ChatMessagesHolderContent({}:ChatMessagesHolderContentProps) {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-  const { mnessages } = useSelector((state: AppState) => state.messageSlice);
+  const { messages } = useSelector((state: AppState) => state.messageSlice);
   
   useEffect(() => {
     if (!id) return;
@@ -21,7 +21,7 @@ export default function ChatMessagesHolderContent({}:ChatMessagesHolderContentPr
 
   const stucturalMessages = useMemo(() => {
     const newMessages: [string, MessageDocument[]][] = [];
-    mnessages.forEach((msg, idx, array) => {
+    messages.forEach((msg, idx, array) => {
       if (!newMessages.length) {
         newMessages.push([msg.writter?.id!, [msg]]);
       } else if (+newMessages.slice(-1)?.[0]?.[0] === +msg.writter?.id!) {
@@ -31,7 +31,7 @@ export default function ChatMessagesHolderContent({}:ChatMessagesHolderContentPr
       }
     });
     return newMessages;
-  }, [mnessages]);
+  }, [messages]);
   console.log({ stucturalMessages });
   return (
     <div className={styles.chatMessagesHolderContent}>

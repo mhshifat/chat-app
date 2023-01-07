@@ -13,6 +13,10 @@ export interface CreateMessageFormValues {
   conversationId: string;
 }
 
+export interface UpdateMessageFormValues {
+  message: string;
+}
+
 export default function ChatMessagesHolderInput({}:ChatMessagesHolderInputProps) {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();

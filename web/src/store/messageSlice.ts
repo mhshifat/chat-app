@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { RegisterFormValues } from './../components/modules/auth/RegisterForm/RegisterForm';
 import { LoginFormValues } from './../components/modules/auth/LoginForm/LoginForm';
-import { createMessage, getMessages } from '../utils/api';
+import { createMessage, getMessages, updateMessage } from '../utils/api';
 import { UserDocument } from './authSlice';
 import { ConversationDocument } from './conversationSlice';
-import { CreateMessageFormValues } from '../components/modules/Chat/ChatMessagesHolder/ChatMessagesHolderInput';
+import { CreateMessageFormValues, UpdateMessageFormValues } from '../components/modules/Chat/ChatMessagesHolder/ChatMessagesHolderInput';
 
 export interface MessageDocument {
   id?: string;
@@ -18,12 +18,12 @@ export interface MessageDocument {
 
 export interface MessageState {
   loading: boolean;
-  mnessages: MessageDocument[];
+  messages: MessageDocument[];
 }
 
 const initialState: MessageState = {
   loading: false,
-  mnessages: [],
+  messages: [],
 }
 
 export interface GetMessagesParams {
@@ -32,6 +32,9 @@ export interface GetMessagesParams {
 
 export const getMessagesThunk = createAsyncThunk("message/get", async (params: GetMessagesParams) => getMessages(params));
 export const createMessageThunk = createAsyncThunk("message/create", async (values: CreateMessageFormValues) => createMessage(values));
+export const updateMessageThunk = createAsyncThunk("message/update", async ({ id, values }: { id: MessageDocument["id"], values: UpdateMessageFormValues }, { rejectWithValue }) => {
+  return updateMessage(id, values).catch(err => rejectWithValue(err?.response?.data?.error))
+});
 export const messageSlice = createSlice({
   name: 'messages',
   initialState,
@@ -43,7 +46,7 @@ export const messageSlice = createSlice({
     .addCase(getMessagesThunk.fulfilled, (state, action) => {
       if (action.payload.data.success) {
         state.loading = false;
-        state.mnessages = action.payload.data.result;
+        state.messages = action.payload.data.result;
       }
     })
     .addCase(getMessagesThunk.rejected, (state) => {
@@ -55,10 +58,23 @@ export const messageSlice = createSlice({
     .addCase(createMessageThunk.fulfilled, (state, action) => {
       if (action.payload.data.success) {
         state.loading = false;
-        state.mnessages.unshift(action.payload.data.result);
+        state.messages.unshift(action.payload.data.result);
       }
     })
     .addCase(createMessageThunk.rejected, (state) => {
+      state.loading = false;
+    })
+    .addCase(updateMessageThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(updateMessageThunk.fulfilled, (state, action) => {
+      if (action.payload.data.success) {
+        state.loading = false;
+        const messageIdx = state.messages.findIndex(msg => msg.id === action.payload.data.result.id);
+        state.messages[messageIdx] = action.payload.data.result;
+      }
+    })
+    .addCase(updateMessageThunk.rejected, (state) => {
       state.loading = false;
     })
 })

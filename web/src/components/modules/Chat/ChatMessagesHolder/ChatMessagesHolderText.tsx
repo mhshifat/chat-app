@@ -1,14 +1,26 @@
-import { useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect, KeyboardEvent as KeyboardEventReact } from 'react';
 import styles from "./ChatMessagesHolder.module.css";
 import { PropsWithChildren, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { MessageDocument, updateMessageThunk } from './../../../../store/messageSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, AppState } from '../../../../store';
+import { useRef } from 'react';
 
-interface ChatMessagesHolderTextProps {}
+interface ChatMessagesHolderTextProps {
+  msg: MessageDocument;
+}
 type PopupCoord = { x: number, y: number };
 
 const CONTEXT_MENU_OPTIONS = ["Edit", "Delete"]
 
-export default function ChatMessagesHolderText({ children }:PropsWithChildren<ChatMessagesHolderTextProps>) {
+export default function ChatMessagesHolderText({ children, msg }:PropsWithChildren<ChatMessagesHolderTextProps>) {
+  const dispatch = useDispatch<AppDispatch>();
+  const functionsRef = useRef({
+    dispatch
+  });
+  const [error, setError] = useState("");
+  const { user } = useSelector((state: AppState) => state.authSlice);
   const [popupCoord, setPopupCoord] = useState<PopupCoord | null>(null);
   const [showInput, setShowInput] = useState(false);
   const handleContextMenu = useCallback((coord: PopupCoord) => {
@@ -21,6 +33,18 @@ export default function ChatMessagesHolderText({ children }:PropsWithChildren<Ch
       setShowInput(true);
     }
   }, []);
+
+  const handleUpdateMessage = useCallback(async (e: KeyboardEventReact<HTMLInputElement>) => {
+    const { value } = e.currentTarget;
+    if (e.key !== "Enter") return;
+    if (value === children) return setShowInput(false);
+    functionsRef.current.dispatch(updateMessageThunk({
+      id: msg.id,
+      values: {
+        message: value
+      }
+    })).unwrap().then(() => setShowInput(false)).catch((err) => setError(err));
+  }, [children, msg.id]);
 
   useLayoutEffect(() => {
     if (!showInput) return;
@@ -47,11 +71,19 @@ export default function ChatMessagesHolderText({ children }:PropsWithChildren<Ch
         </p>
       ) : (
         <div className={styles.chatMessagesHolderText__editableInput}>
-          <input type="text" defaultValue={children as string} autoFocus />
-          <small><strong>Escape</strong> to close the input</small>
+          <input type="text" defaultValue={children as string} autoFocus onKeyUp={handleUpdateMessage} />
+          <small className={error ? styles.chatMessagesHolderText__errorMsg : ""}>
+            {!error ? (
+              <>
+                <strong>Escape</strong> to close the input
+              </>
+            ) : (
+              error
+            )}
+          </small>
         </div>
       )}
-      {popupCoord && createPortal(
+      {msg.writter?.id === user?.id && popupCoord && createPortal(
         (
           <div
             className={styles.chatMessagesHolderText__menuWrapper}

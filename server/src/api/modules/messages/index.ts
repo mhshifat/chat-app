@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { MessageController } from "./controller";
 import { validateRequest, requiresAuth } from "../../middlewares";
-import { CreateMessageValidationSchema } from "./validations";
+import { CreateMessageValidationSchema, UpdateMessageValidationSchema } from "./validations";
 
 export const messageRouter = Router();
 
@@ -12,4 +12,10 @@ messageRouter.route("/")
   .post(
     [validateRequest(CreateMessageValidationSchema)],
     MessageController.createMessage
+  );
+
+messageRouter.route("/:id")
+  .patch(
+    [validateRequest(UpdateMessageValidationSchema)],
+    MessageController.updateMessage
   );

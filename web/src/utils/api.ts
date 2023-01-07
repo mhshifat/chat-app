@@ -5,7 +5,7 @@ import { UserDocument } from "../store/authSlice";
 import { CreateConversationFormValues } from "../components/modules/Chat/CreateChatModal/CreateChatModal";
 import { ConversationDocument } from "../store/conversationSlice";
 import { GetMessagesParams, MessageDocument } from "../store/messageSlice";
-import { CreateMessageFormValues } from "../components/modules/Chat/ChatMessagesHolder/ChatMessagesHolderInput";
+import { CreateMessageFormValues, UpdateMessageFormValues } from "../components/modules/Chat/ChatMessagesHolder/ChatMessagesHolderInput";
 
 const { REACT_APP_API_SERVER } = process.env;
 export const httpClient = axios.create({
@@ -41,3 +41,5 @@ export const getMessages = (params: GetMessagesParams) => httpClient
   });
 export const createMessage = (values: CreateMessageFormValues) => httpClient
   .post<HttpResponse<MessageDocument>>("/api/messages", values);
+export const updateMessage = (id: MessageDocument["id"], values: UpdateMessageFormValues) => httpClient
+  .patch<HttpResponse<MessageDocument>>(`/api/messages/${id}`, values);

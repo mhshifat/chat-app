@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { MessageService } from "./service";
-import { CreateMessageBody, GetConversationMessagesParams } from "./types";
+import { CreateMessageBody, GetConversationMessagesParams, UpdateMessageBody } from "./types";
 import { RequestResponse } from "../../../utils/response";
 
 export const MessageController = {
@@ -14,6 +14,10 @@ export const MessageController = {
       message: req.body.message,
       writter: req.currentUser
     });
+    return RequestResponse.setResponse(res).setStatusCode(201).setData(doc).success();
+  },
+  async updateMessage(req: Request<{ id: string }, any, UpdateMessageBody>, res: Response, next: NextFunction) {
+    const doc = await MessageService.updateMessage(req.params.id, req.body, req.currentUser!);
     return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
   },
 }

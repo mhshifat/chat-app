@@ -1,6 +1,6 @@
 import { FindOptionsWhere } from "typeorm";
 import { Message } from "./entity"
-import { MessageDocument, CreateMessageBody } from "./types";
+import { MessageDocument, CreateMessageBody, UpdateMessageBody } from "./types";
 import { HttpError } from "../../../utils/errors";
 import { ConversationService } from "../conversations/service";
 import { UserDocument } from "../users/types";
@@ -37,6 +37,27 @@ export const MessageService = {
       conversation: conversations[0],
       writter: body.writter
     });
-    return doc.save();
+    conversations[0].lastMessageSent = doc;
+    const newDoc = await doc.save();
+    await conversations[0].save();
+    return newDoc;
+  },
+  async updateMessage(id: Message["id"], body: UpdateMessageBody, authUser: UserDocument) {
+    const message = await Message
+      .createQueryBuilder("message")
+      .leftJoinAndSelect("message.conversation", "conversation")
+      .where("message.id = :id", { id })
+      .andWhere("message.writter.id = :writterId", { writterId: authUser.id })
+      .leftJoinAndSelect("message.writter", "writter")
+      .getOne();
+    if (!message) throw new HttpError(403, "Not authorized");
+    message.message = body.message;
+    const updatedMsg = await message.save();
+    const conversations = await ConversationService.findConversationWhereAuthUserBelongsTo(+message.conversation.id, +authUser.id!);
+    if (conversations?.[0]?.lastMessageSent?.id === updatedMsg.id) {
+      conversations[0].lastMessageSent = message;
+      await conversations[0].save();
+    }
+    return updatedMsg;
   }
 }

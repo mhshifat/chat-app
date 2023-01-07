@@ -234,3 +234,7 @@
   line-height: 1.2;
   color: var(--secondaryTextColor);
 }
+
+.chatMessagesHolderText__errorMsg {
+  color: var(--dangerColor) !important;
+}

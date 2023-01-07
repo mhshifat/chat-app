@@ -34,6 +34,7 @@ export const ConversationService = {
       .andWhere("users.id IN (:...ids)", { ids: [authUserId] })
       .select("conversation", "conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
+      .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
       .getMany();
     return docs;
   },

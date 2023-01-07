@@ -16,7 +16,7 @@ export default function ChatMessagesHolderMultiMessage({ messages }:ChatMessages
       <span>
       <h3>{`${messages?.[0]?.writter?.first_name} ${messages?.[0]?.writter?.last_name}`} <small>{formatDistance(new Date(messages?.[0].created_at as unknown as Date), new Date(), { addSuffix: true })}</small></h3>
         {messages.map(msg => (
-          <ChatMessagesHolderText key={msg.id}>{msg.message}</ChatMessagesHolderText>
+          <ChatMessagesHolderText key={msg.id} msg={msg}>{msg.message}</ChatMessagesHolderText>
         ))}
       </span>
     </div>

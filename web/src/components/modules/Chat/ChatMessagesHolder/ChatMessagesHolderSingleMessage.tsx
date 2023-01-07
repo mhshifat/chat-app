@@ -15,7 +15,7 @@ export default function ChatMessagesHolderSingleMessage({ message }:ChatMessages
       </span>
       <span>
         <h3>{`${message?.writter?.first_name} ${message?.writter?.last_name}`} <small>{formatDistance(new Date(message.created_at as unknown as Date), new Date(), { addSuffix: true })}</small></h3>
-        <ChatMessagesHolderText>{message.message}</ChatMessagesHolderText>
+        <ChatMessagesHolderText msg={message}>{message.message}</ChatMessagesHolderText>
       </span>
     </div>
   )

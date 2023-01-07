@@ -6,6 +6,9 @@ export interface CreateMessageBody {
   message: string;
   writter?: UserDocument;
 }
+export interface UpdateMessageBody {
+  message: string;
+}
 
 export interface MessageDocument {
   id?: string;
