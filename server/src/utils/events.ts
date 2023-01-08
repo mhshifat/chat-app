@@ -46,6 +46,20 @@ export function handleSocketEvents(socket: Socket) {
     });
   })
 
+  socket.on('isTyping', ({ typingUser, toUsers, conversation }) => {
+    toUsers.forEach((u: UserDocument) => {
+      const uSocket = socketsMap.get(`users-${u.id}`);
+      uSocket?.emit("isTyping", { typingUser, conversation });
+    })
+  })
+
+  socket.on('stopedTyping', ({ toUsers, conversation }) => {
+    toUsers.forEach((u: UserDocument) => {
+      const uSocket = socketsMap.get(`users-${u.id}`);
+      uSocket?.emit("stopedTyping", { conversation });
+    })
+  })
+
   socket.on('disconnect', () => {
     console.log(socket.id + ' user disconnected');
     const filteredSocket = [...socketsMap.entries()].find((array) => String(array[1].id) !== String(socket.id));

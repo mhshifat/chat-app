@@ -238,3 +238,10 @@
 .chatMessagesHolderText__errorMsg {
   color: var(--dangerColor) !important;
 }
+
+.chatMessagesHolderTypingText {
+  font-size: 1.2rem;
+  padding-left: 60px;
+  font-style: italic;
+  color: var(--secondaryTextColor);
+}
