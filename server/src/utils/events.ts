@@ -38,6 +38,14 @@ export function handleSocketEvents(socket: Socket) {
     });
   })
 
+  eventEmitter.on("onMessageDelete", ({ message, conversation }) => {
+    const users = conversation?.users?.filter?.((u: UserDocument) => String(u.id) !== String(message.writter.id)) || [];
+    users.forEach((u: UserDocument) => {
+      const uSocket = socketsMap.get(`users-${u.id}`);
+      uSocket.emit("onMessageDelete", { message, conversation });
+    });
+  })
+
   socket.on('disconnect', () => {
     console.log(socket.id + ' user disconnected');
     const filteredSocket = [...socketsMap.entries()].find((array) => String(array[1].id) !== String(socket.id));

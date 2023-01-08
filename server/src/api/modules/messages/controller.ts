@@ -24,7 +24,8 @@ export const MessageController = {
     return RequestResponse.setResponse(res).setStatusCode(200).setData(message).success();
   },
   async deleteMessage(req: Request<{ id: string }, any, any>, res: Response, next: NextFunction) {
-    const doc = await MessageService.deleteMessage(req.params.id, req.currentUser!);
-    return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
+    const { message, conversation } = await MessageService.deleteMessage(req.params.id, req.currentUser!);
+    eventEmitter.emit("onMessageDelete", { message, conversation });
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(message).success();
   },
 }

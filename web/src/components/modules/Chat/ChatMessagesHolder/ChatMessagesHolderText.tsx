@@ -35,7 +35,12 @@ export default function ChatMessagesHolderText({ children, msg }:PropsWithChildr
     }
 
     if (type === "delete") {
-      functionsRef.current.dispatch(deleteMessageThunk(msg.id))
+      functionsRef.current.dispatch(deleteMessageThunk(msg.id)).unwrap().then((res) => {
+        functionsRef.current.dispatch(updateIfLastConversation({
+          ...res.data.result.conversation,
+          lastMessageSent: res.data.result
+        }));
+      })
     }
   }, [msg.id]);
 

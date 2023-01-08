@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../../../store";
 import { useEffect } from "react";
 import { useSocket } from "../../../providers/socket";
-import { MessageDocument, addMessage, updateMessageReducer } from "../../../store/messageSlice";
+import { MessageDocument, addMessage, updateMessageReducer, deleteMessageReducer } from "../../../store/messageSlice";
 import { ConversationDocument, updateConversation } from './../../../store/conversationSlice';
 
 export default function ChatLayout({ children }: PropsWithChildren) {
@@ -40,15 +40,19 @@ export default function ChatLayout({ children }: PropsWithChildren) {
     const handleNewMsgUpdate = ({ message, conversation }: { message: MessageDocument, conversation: ConversationDocument }) => {
       functionsRef.current.dispatch(updateMessageReducer(message));
       functionsRef.current.dispatch(updateConversation(conversation));
-      socketEventRef.current.initialTime = new Date().getTime();
-      socketEventRef.current.prevData = message;
     }
     socketRef.socket?.on("onMessageUpdate", handleNewMsgUpdate);
+    const handleNewMsgDelete = ({ message, conversation }: { message: MessageDocument, conversation: ConversationDocument }) => {
+      functionsRef.current.dispatch(deleteMessageReducer(message));
+      functionsRef.current.dispatch(updateConversation(conversation));
+    }
+    socketRef.socket?.on("onMessageDelete", handleNewMsgDelete);
     
     return () => {
       socketRef.socket?.emit("systemOut", user?.id);
       socketRef.socket?.off("onMessageCreate", handleNewMsgCreate);
       socketRef.socket?.off("onMessageUpdate", handleNewMsgUpdate);
+      socketRef.socket?.off("onMessageDelete", handleNewMsgDelete);
     }
   }, [user?.id]);
 

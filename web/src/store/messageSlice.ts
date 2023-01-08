@@ -48,6 +48,9 @@ export const messageSlice = createSlice({
     updateMessageReducer: (state, { payload }) => {
       state.messages[String(payload.conversation.id)] = state.messages[String(payload.conversation.id)]?.map(msg => String(msg.id) === String(payload.id) ? payload : msg) || [];
     },
+    deleteMessageReducer: (state, { payload }) => {
+      state.messages[String(payload.conversation.id)] = state.messages[String(payload.conversation.id)]?.filter(msg => String(msg.id) !== String(payload.id)) || [];
+    },
   },
   extraReducers: (builder) => builder
     .addCase(getMessagesThunk.pending, (state) => {
@@ -105,5 +108,5 @@ export const messageSlice = createSlice({
     })
 })
 
-export const { addMessage, updateMessageReducer } = messageSlice.actions
+export const { addMessage, updateMessageReducer, deleteMessageReducer } = messageSlice.actions
 export default messageSlice.reducer;

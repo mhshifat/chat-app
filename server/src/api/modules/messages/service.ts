@@ -78,8 +78,9 @@ export const MessageService = {
         .getMany();
       conversations[0].lastMessageSent = lastMessages[1];
       await conversations[0].save();
+      message.message = lastMessages[1].message;
     }
     await message.remove();
-    return {...message, id: +id};
+    return { message: {...message, id: +id}, conversation: conversations[0] };
   },
 }
