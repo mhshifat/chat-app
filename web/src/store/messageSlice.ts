@@ -43,7 +43,7 @@ export const messageSlice = createSlice({
   initialState,
   reducers: {
     addMessage: (state, { payload }) => {
-      state.messages[String(payload.conversation.id)].unshift(payload);
+      state.messages[String(payload.conversation.id)]?.unshift(payload);
     }
   },
   extraReducers: (builder) => builder

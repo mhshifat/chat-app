@@ -17,13 +17,24 @@ export default function ChatLayout({ children }: PropsWithChildren) {
     socket,
     dispatch
   });
+  const socketEventRef = useRef<any>({
+    initialTime: null,
+    prevData: null
+  });
 
   useEffect(() => {
     const socketRef = functionsRef.current;
     socketRef.socket?.emit("systemJoined", user?.id);
     const handleNewMsgCreate = ({ message, conversation }: { message: MessageDocument, conversation: ConversationDocument }) => {
+      if (
+        socketEventRef.current.initialTime &&
+        ((socketEventRef.current.initialTime - new Date().getTime()) / 1000) <= 10 &&
+        JSON.stringify(socketEventRef.current.prevData) === JSON.stringify(message)
+      ) return;
       functionsRef.current.dispatch(addMessage(message));
       functionsRef.current.dispatch(updateConversation(conversation));
+      socketEventRef.current.initialTime = new Date().getTime();
+      socketEventRef.current.prevData = message;
     }
     socketRef.socket?.on("onMessageCreate", handleNewMsgCreate);
     
