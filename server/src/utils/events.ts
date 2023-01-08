@@ -6,7 +6,8 @@ const socketsMap = new Map();
 export const eventEmitter = new events.EventEmitter();
 export function handleSocketEvents(socket: Socket) {
   console.log("Socket events configed");
-  
+  eventEmitter.removeAllListeners();
+
   socket.on("systemJoined", (userId) => {
     socketsMap.set(`users-${userId}`, socket);
     console.log("socketsMapJoin", [...socketsMap.entries()].map(array => [array[0], array[1].id]));
@@ -34,7 +35,6 @@ export function handleSocketEvents(socket: Socket) {
     const filteredSocket = [...socketsMap.entries()].find((array) => String(array[1].id) !== String(socket.id));
     if (filteredSocket) socketsMap.delete(filteredSocket[0]);
     console.log("socketsMapDis", [...socketsMap.entries()].map(array => [array[0], array[1].id]));
-    
     eventEmitter.removeAllListeners();
   });
 }

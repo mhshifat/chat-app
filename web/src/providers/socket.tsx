@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, PropsWithChildren, useContext } from 'react';
+import { useState, useEffect, createContext, PropsWithChildren, useContext } from 'react';
 import io, { Socket } from "socket.io-client";
 
 const { REACT_APP_SOCKET_URI = "localhost" } = process.env;
