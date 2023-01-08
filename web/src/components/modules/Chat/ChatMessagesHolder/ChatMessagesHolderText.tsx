@@ -6,6 +6,7 @@ import { MessageDocument, deleteMessageThunk, updateMessageThunk } from './../..
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from '../../../../store';
 import { useRef } from 'react';
+import { updateIfLastConversation } from '../../../../store/conversationSlice';
 
 interface ChatMessagesHolderTextProps {
   msg: MessageDocument;
@@ -47,7 +48,13 @@ export default function ChatMessagesHolderText({ children, msg }:PropsWithChildr
       values: {
         message: value
       }
-    })).unwrap().then(() => setShowInput(false)).catch((err) => setError(err));
+    })).unwrap().then((res) => {
+      setShowInput(false);
+      functionsRef.current.dispatch(updateIfLastConversation({
+        ...res.data.result.conversation,
+        lastMessageSent: res.data.result
+      }));
+    }).catch((err) => setError(err));
   }, [children, msg.id]);
 
   useLayoutEffect(() => {

@@ -19,8 +19,9 @@ export const MessageController = {
     return RequestResponse.setResponse(res).setStatusCode(201).setData(message).success();
   },
   async updateMessage(req: Request<{ id: string }, any, UpdateMessageBody>, res: Response, next: NextFunction) {
-    const doc = await MessageService.updateMessage(req.params.id, req.body, req.currentUser!);
-    return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
+    const { message, conversation } = await MessageService.updateMessage(req.params.id, req.body, req.currentUser!);
+    eventEmitter.emit("onMessageUpdate", { message, conversation });
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(message).success();
   },
   async deleteMessage(req: Request<{ id: string }, any, any>, res: Response, next: NextFunction) {
     const doc = await MessageService.deleteMessage(req.params.id, req.currentUser!);

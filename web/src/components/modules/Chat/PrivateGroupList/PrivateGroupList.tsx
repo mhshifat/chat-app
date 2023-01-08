@@ -14,6 +14,7 @@ interface PrivateGroupListProps {
 export default function PrivateGroupList({ type = "private" }: PrivateGroupListProps) {
   const navigate = useNavigate();
   const { conversations } = useSelector((state: AppState) => state.conversationSlice);
+  const { user } = useSelector((state: AppState) => state.authSlice);
 
   const filterConversationsAsType = useMemo(() => {
     return conversations.filter((c) => c.type === type)
@@ -21,9 +22,9 @@ export default function PrivateGroupList({ type = "private" }: PrivateGroupListP
 
   const conversationTitle = useCallback((conversation: ConversationDocument) => {
     return conversation.type === "private" 
-      ? `${conversation.users?.find(u => u.id !== conversation.creator?.id)?.first_name} ${conversation.users?.find(u => u.id !== conversation.creator?.id)?.last_name}`
+      ? `${conversation.users?.find(u => u.id !== user?.id)?.first_name} ${conversation.users?.find(u => u.id !== user?.id)?.last_name}`
       : (conversation?.name || "");
-    }, []);
+    }, [user?.id]);
   return (
     <ul className={styles.privateGroupList}>
       {filterConversationsAsType.map((con) => (

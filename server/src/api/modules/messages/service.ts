@@ -58,7 +58,7 @@ export const MessageService = {
       conversations[0].lastMessageSent = message;
       await conversations[0].save();
     }
-    return updatedMsg;
+    return { message: updatedMsg, conversation: conversations[0] };
   },
   async deleteMessage(id: Message["id"], authUser: UserDocument) {
     const message = await Message

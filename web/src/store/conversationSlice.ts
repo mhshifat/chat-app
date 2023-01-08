@@ -40,7 +40,10 @@ export const conversationSlice = createSlice({
       state.type = payload
     },
     updateConversation: (state, { payload }) => {
-      state.conversations = state.conversations.map(c => c.id === payload.id ? payload : c);
+      state.conversations = state.conversations.map(c => c.id === payload.id ? ({...c, ...payload}) : c);
+    },
+    updateIfLastConversation: (state, { payload }) => {
+      state.conversations = state.conversations.map(c => c.id === payload.id && payload.lastMessageSent.id === c.lastMessageSent?.id ? ({...c, ...payload}) : c);
     },
   },
   extraReducers: (builder) => builder
@@ -70,5 +73,5 @@ export const conversationSlice = createSlice({
     })
 })
 
-export const { setConversationType, updateConversation } = conversationSlice.actions
+export const { setConversationType, updateConversation, updateIfLastConversation } = conversationSlice.actions
 export default conversationSlice.reducer;
