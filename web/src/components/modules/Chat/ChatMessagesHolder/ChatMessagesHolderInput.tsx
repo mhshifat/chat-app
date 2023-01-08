@@ -52,8 +52,6 @@ export default function ChatMessagesHolderInput({}:ChatMessagesHolderInputProps)
   const getTypingText = useMemo(() => {
     return typingUsers.reduce((acc, val) => acc += val?.first_name + " " + val?.last_name.charAt(0).toUpperCase() + "., ", "")
   }, [typingUsers]);
-  console.log({ typingUsers });
-  
 
   useEffect(() => {
     const socketRef = functionsRef.current.socket;
@@ -81,7 +79,6 @@ export default function ChatMessagesHolderInput({}:ChatMessagesHolderInputProps)
         <li><AiOutlinePlus /></li>
         <li>
           <input type="text" placeholder="Send Message to #" onKeyUp={({ currentTarget, key }) => {
-            console.log("Typing", getConversation);
             socket?.emit("isTyping", {
               typingUser: user,
               toUsers: getConversation?.users?.filter(u => u.id !== user?.id) || [],
@@ -91,8 +88,6 @@ export default function ChatMessagesHolderInput({}:ChatMessagesHolderInputProps)
             if (typing) {
               timer && clearTimeout(timer);
               const timeout = setTimeout(() => {
-                // Send typing event
-                console.log("Typing Stoped");
                 setTyping(false);
                 socket?.emit("stopedTyping", {
                   toUsers: getConversation?.users?.filter(u => u.id !== user?.id) || [],
