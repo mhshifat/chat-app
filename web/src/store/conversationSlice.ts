@@ -43,7 +43,7 @@ export const conversationSlice = createSlice({
       state.conversations.unshift(payload);
     },
     updateConversation: (state, { payload }) => {
-      state.conversations = state.conversations.map(c => c.id === payload.id ? ({...c, ...payload}) : c);
+      state.conversations = state.conversations.map(c => c.id === payload.id ? ({...c, ...payload}) : c).sort((a, b) => String(b.id) === String(payload.id) ? 1 : -1);
     },
     updateIfLastConversation: (state, { payload }) => {
       state.conversations = state.conversations.map(c => c.id === payload.id && payload.lastMessageSent.id === c.lastMessageSent?.id ? ({...c, ...payload}) : c);
