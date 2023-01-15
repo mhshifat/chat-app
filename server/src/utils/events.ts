@@ -18,15 +18,19 @@ export function handleSocketEvents(socket: Socket) {
     console.log("socketsMapLeave", [...socketsMap.entries()].map(array => [array[0], array[1].id]));
   })
 
-  eventEmitter.on("onConversationCreate", (data) => {
-    console.log("onConversationCreate", data);
+  eventEmitter.on("onConversationCreate", (conversation) => {
+    const users = conversation?.users?.filter?.((u: UserDocument) => String(u.id) !== String(conversation.creator.id)) || [];
+    users.forEach((u: UserDocument) => {
+      const uSocket = socketsMap.get(`users-${u.id}`);
+      uSocket?.emit?.("onConversationCreate", conversation);
+    });
   })
 
   eventEmitter.on("onMessageCreate", ({ message, conversation }) => {
     const users = conversation?.users?.filter?.((u: UserDocument) => String(u.id) !== String(message.writter.id)) || [];
     users.forEach((u: UserDocument) => {
       const uSocket = socketsMap.get(`users-${u.id}`);
-      uSocket.emit("onMessageCreate", { message, conversation });
+      uSocket?.emit?.("onMessageCreate", { message, conversation });
     });
   })
 
@@ -34,7 +38,7 @@ export function handleSocketEvents(socket: Socket) {
     const users = conversation?.users?.filter?.((u: UserDocument) => String(u.id) !== String(message.writter.id)) || [];
     users.forEach((u: UserDocument) => {
       const uSocket = socketsMap.get(`users-${u.id}`);
-      uSocket.emit("onMessageUpdate", { message, conversation });
+      uSocket?.emit?.("onMessageUpdate", { message, conversation });
     });
   })
 
@@ -42,7 +46,7 @@ export function handleSocketEvents(socket: Socket) {
     const users = conversation?.users?.filter?.((u: UserDocument) => String(u.id) !== String(message.writter.id)) || [];
     users.forEach((u: UserDocument) => {
       const uSocket = socketsMap.get(`users-${u.id}`);
-      uSocket.emit("onMessageDelete", { message, conversation });
+      uSocket?.emit?.("onMessageDelete", { message, conversation });
     });
   })
 

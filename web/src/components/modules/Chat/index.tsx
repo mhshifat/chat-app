@@ -7,7 +7,7 @@ import { AppState } from "../../../store";
 import { useEffect } from "react";
 import { useSocket } from "../../../providers/socket";
 import { MessageDocument, addMessage, updateMessageReducer, deleteMessageReducer } from "../../../store/messageSlice";
-import { ConversationDocument, updateConversation } from './../../../store/conversationSlice';
+import { ConversationDocument, addConversation, updateConversation } from './../../../store/conversationSlice';
 
 export default function ChatLayout({ children }: PropsWithChildren) {
   const socket = useSocket();
@@ -47,12 +47,17 @@ export default function ChatLayout({ children }: PropsWithChildren) {
       functionsRef.current.dispatch(updateConversation(conversation));
     }
     socketRef.socket?.on("onMessageDelete", handleNewMsgDelete);
+    const handleNewConversation = (conversation: ConversationDocument) => {
+      functionsRef.current.dispatch(addConversation(conversation));
+    }
+    socketRef.socket?.on("onConversationCreate", handleNewConversation);
     
     return () => {
       socketRef.socket?.emit("systemOut", user?.id);
       socketRef.socket?.off("onMessageCreate", handleNewMsgCreate);
       socketRef.socket?.off("onMessageUpdate", handleNewMsgUpdate);
       socketRef.socket?.off("onMessageDelete", handleNewMsgDelete);
+      socketRef.socket?.off("onConversationCreate", handleNewConversation);
     }
   }, [user?.id]);
 

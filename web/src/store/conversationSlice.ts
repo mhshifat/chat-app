@@ -39,6 +39,9 @@ export const conversationSlice = createSlice({
     setConversationType: (state, { payload }) => {
       state.type = payload
     },
+    addConversation: (state, { payload }) => {
+      state.conversations.unshift(payload);
+    },
     updateConversation: (state, { payload }) => {
       state.conversations = state.conversations.map(c => c.id === payload.id ? ({...c, ...payload}) : c);
     },
@@ -73,5 +76,5 @@ export const conversationSlice = createSlice({
     })
 })
 
-export const { setConversationType, updateConversation, updateIfLastConversation } = conversationSlice.actions
+export const { setConversationType, updateConversation, updateIfLastConversation, addConversation } = conversationSlice.actions
 export default conversationSlice.reducer;
