@@ -6,12 +6,14 @@ import Label from "../../../common/Label/Label";
 import Select from "../../../common/Select/Select";
 import styles from "./CreateChatModal.module.css";
 import { useForm } from "react-hook-form";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../../../store";
 import { createConversationThunk } from "../../../../store/conversationSlice";
 import { promisedToast } from "../../../../utils/toast";
 import { useNavigate } from "react-router-dom";
+import CustomSelect from './../../../common/CustomSelect/CustomSelect';
+import { fetchFriendsThunk } from "../../../../store/authSlice";
 
 interface CreateChatModalProps {
   isOpen?: boolean;
@@ -39,8 +41,10 @@ const schema = yup.object().shape({
 export default function CreateChatModal({ isOpen, closeModal }: CreateChatModalProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [searchTerm, setSearchTerm] = useState("");
   const { loading } = useSelector((state: AppState) => state.conversationSlice);
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<CreateConversationFormValues>({
+  const { friends } = useSelector((state: AppState) => state.authSlice);
+  const { register, handleSubmit, watch, formState: { errors }, setValue, setError } = useForm<CreateConversationFormValues>({
     resolver: yupResolver(schema),
     mode: "onChange",
     reValidateMode: "onChange"
@@ -57,28 +61,46 @@ export default function CreateChatModal({ isOpen, closeModal }: CreateChatModalP
       console.log(err);
     }
   }, [dispatch, closeModal, navigate]);
+
+  useEffect(() => {
+    dispatch(fetchFriendsThunk(searchTerm))
+  }, [dispatch, searchTerm]);
+
   return (
     <form className={styles.createChatModal} onSubmit={handleSubmit(createConversation)}>
       <h3>Send Custom Message</h3>
 
       <div>
-        <Label title="Conversation type" inverted error={errors.type?.message}>
-          <Select
-            options={[
-              { label: "Private", value: "private" },
-              { label: "Group", value: "group" },
-            ]}
-            {...register("type")}
-          />
-        </Label>
+        <CustomSelect
+          placeholder="Conversation Type"
+          searchable={true}
+          items={[
+            { label: "Private", value: "private" },
+            { label: "Group", value: "group" },
+          ]}
+          onChange={(values) => {
+            setValue("type", values[0].value, { shouldDirty: true });
+            setError("type", { message: "" });
+          }}
+        />
+        <CustomSelect
+          placeholder="Reciepients"
+          searchable={true}
+          items={friends.map(friend => ({
+            label: `${friend.first_name} ${friend.last_name} (${friend.email})`,
+            value: friend.email
+          }))}
+          onChange={(values) => {
+            setValue("email", values.map(item => item.value).join(","), { shouldDirty: true });
+            setError("email", { message: "" });
+          }}
+          isMulti={watch("type") === "group"}
+        />
         {watch("type") === "group" && (
           <Label title="Name" inverted error={errors.name?.message}>
             <Input {...register("name")} />
           </Label>
         )}
-        <Label title="Email" inverted error={errors.email?.message}>
-          <Input {...register("email")} />
-        </Label>
         <Label title="Message" inverted error={errors.message?.message}>
           <Input {...register("message")} />
         </Label>

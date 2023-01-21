@@ -41,6 +41,7 @@ export const conversationSlice = createSlice({
     },
     addConversation: (state, { payload }) => {
       state.conversations.unshift(payload);
+      state.conversations.sort((a, b) => new Date(b!.lastMessageSent!.created_at!).getTime() < new Date(a!.lastMessageSent!.created_at!).getTime() ? -1 : 1);
     },
     updateConversation: (state, { payload }) => {
       state.conversations = state.conversations.map(c => c.id === payload.id ? ({...c, ...payload}) : c).sort((a, b) => String(b.id) === String(payload.id) ? 1 : -1);
@@ -57,6 +58,7 @@ export const conversationSlice = createSlice({
       if (action.payload.data.success) {
         state.loading = false;
         state.conversations = action.payload.data.result;
+        state.conversations.sort((a, b) => new Date(b!.lastMessageSent!.created_at!).getTime() < new Date(a!.lastMessageSent!.created_at!).getTime() ? -1 : 1);
       }
     })
     .addCase(getConversationsThunk.rejected, (state) => {
@@ -69,6 +71,7 @@ export const conversationSlice = createSlice({
       if (action.payload.data.success) {
         state.loading = false;
         state.conversations.unshift(action.payload.data.result);
+        state.conversations.sort((a, b) => new Date(b!.lastMessageSent!.created_at!).getTime() < new Date(a!.lastMessageSent!.created_at!).getTime() ? -1 : 1);
       }
     })
     .addCase(createConversationThunk.rejected, (state) => {

@@ -6,20 +6,23 @@ import { LoginValidationSchema, RegisterValidationSchema } from "./validations";
 export const userRouter = Router();
 
 userRouter.route("/")
-.get(UserController.getAll);
+  .get(UserController.getAll);
+
+userRouter.route("/friends")
+  .get(UserController.getSearchedUsers);
 
 userRouter.route("/me")
-.get(UserController.getMe)
-.delete(UserController.signOut);
+  .get(UserController.getMe)
+  .delete(UserController.signOut);
 
 userRouter.route("/login")
-.post(
-  [validateRequest(LoginValidationSchema)],
-  UserController.login
-);
+  .post(
+    [validateRequest(LoginValidationSchema)],
+    UserController.login
+  );
 
 userRouter.route("/register")
-.post(
-  [validateRequest(RegisterValidationSchema)],
-  UserController.register
-);
+  .post(
+    [validateRequest(RegisterValidationSchema)],
+    UserController.register
+  );

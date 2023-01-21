@@ -1,0 +1,138 @@
+.customSelect {
+  width: 100%;
+  height: auto;
+  user-select: none;
+}
+
+.customSelectHandle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  border: 2px solid var(--primaryBgColor);
+  border-radius: var(--radius);
+  padding: 0 var(--spacing);
+  cursor: pointer;
+  color: var(--secondaryTextColor);
+}
+
+.customSelectValues {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 100%;
+  align-items: center;
+  gap: 5px;
+}
+
+.customSelectValues::-webkit-scrollbar {
+  display: none;
+}
+
+.customSelectValue {
+  font-size: 1em;
+  line-height: 1em;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.customSelectIcons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.customSelectIcons span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.customSelectIcons svg {
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.crossIcon {
+  cursor: pointer;
+  transform: rotate(45deg);
+  opacity: .5;
+}
+
+.customSelectOptions {
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--primaryBgColor);
+  border-radius: var(--radius);
+  padding: calc(var(--spacing) / 2) 0;
+  background: var(--secondaryBgColor);
+}
+
+.customSelectSearch {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  gap: 10px;
+  padding: 0 var(--spacing);
+  background: var(--primaryBgColor);
+}
+
+.customSelectSearch__icon {
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.customSelectSearch__input {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--secondaryTextColor);
+  font-size: 1.2em;
+}
+
+.customSelectItems {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+}
+
+.customSelectItem {
+  padding: calc(var(--spacing) / 2) var(--spacing);
+  color: var(--secondaryTextColor);
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: all 200ms ease-in;
+}
+
+.customSelectItem:hover {
+  background: var(--primaryBgColor);
+}
+
+.customSelectChip {
+  width: max-content;
+  background: var(--primaryBgColor);
+  padding: .5em .8em;
+  border-radius: 99999px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.customSelectChip span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 200ms ease-in;
+}
+
+.customSelectChip:hover span {
+  color: var(--dangerColor);
+}

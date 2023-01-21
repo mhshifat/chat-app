@@ -28,6 +28,10 @@ export const registerUser = (values: RegisterFormValues) => httpClient
 export const loginUser = (values: LoginFormValues) => httpClient
   .post<HttpResponse<UserDocument>>("/api/users/login", values);
 
+// Users API
+export const getFriends = (query: string) => httpClient
+  .get<HttpResponse<UserDocument[]>>("/api/users/friends", { params: { search: query } });
+
 // Conversations API
 export const getConversations = () => httpClient
   .get<HttpResponse<ConversationDocument[]>>("/api/conversations");

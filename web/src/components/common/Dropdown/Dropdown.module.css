@@ -1,0 +1,7 @@
+.dropdown {
+  width: max-content;
+  position: fixed;
+  top: -99999999999999;
+  right: -99999999999999;
+  user-select: none;
+}

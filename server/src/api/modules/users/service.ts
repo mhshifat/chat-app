@@ -10,6 +10,12 @@ export const UserService = {
   async findAll(query: FindOptionsWhere<User>) {
     return User.find({ where: query });
   },
+  async searchUsers(query: string) {
+    return User
+      .createQueryBuilder("user")
+      .where("user.email LIKE :query", { query: `%${query}%` })
+      .getMany();
+  },
   async findAndThrowError(query: FindOptionsWhere<User>) {
     const doc = await User.findOne({ where: query });
     if (!doc) throw new HttpError(404, "User not found!");

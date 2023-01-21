@@ -8,7 +8,11 @@ export const UserController = {
     return RequestResponse.setResponse(res).setStatusCode(200).setData(req.currentUser || {}).success();
   },
   async getAll(req: Request, res: Response, next: NextFunction) {
-    const docs = await UserService.findAll();
+    const docs = await UserService.findAll({});
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(docs).success();
+  },
+  async getSearchedUsers(req: Request<any, any, any, { search: string }>, res: Response, next: NextFunction) {
+    const docs = await UserService.searchUsers(req.query.search);
     return RequestResponse.setResponse(res).setStatusCode(200).setData(docs).success();
   },
   async register(req: Request<any, any, RegisterBody>, res: Response, next: NextFunction) {
