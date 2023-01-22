@@ -1,0 +1,82 @@
+.chatParticipents {
+  width: 100%;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chatParticipentsHeader {
+  display: flex;
+  align-items: center;
+  padding: calc(var(--spacing) / 2);
+  background: var(--primaryBgColor);
+  gap: 10px;
+  height: 60px;
+}
+
+.chatParticipentsHeader svg {
+  font-size: 2rem;
+}
+
+.chatParticipentsHeader p {
+  font-size: 1.6rem;
+}
+
+.chatParticipentsBody {
+  flex: 1;
+}
+
+.chatParticipentsList {
+  list-style: none;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.chatParticipentsItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chatParticipentsItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0 1rem;
+}
+
+.chatParticipentsItem__img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  position: relative;
+}
+
+.chatParticipentsItem__img::before {
+  content: "";
+  position: absolute;
+  top: calc(100% - 10px);
+  left: calc(100% - 10px);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: lightgray;
+}
+
+.chatParticipentsItem__img > img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.chatParticipentsItem__title {
+  font-size: 1.7rem;
+}
+
+.chatParticipentsItemOnline::before {
+  background: green;
+}

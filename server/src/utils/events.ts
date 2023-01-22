@@ -64,9 +64,17 @@ export function handleSocketEvents(socket: Socket) {
     })
   })
 
+  socket.on('getOnlineUsers', (socketId) => {
+    const [userIdentifier, userSocket] = [...socketsMap.entries()].find((array) => String(array[1].id) === String(socketId)) || [];
+    if (!userIdentifier || !userSocket) return;
+    const onlineUsersId = [...socketsMap.entries()].map(array => array[0]).map(text => text.split("-")[1]);
+    
+    userSocket.emit("getOnlineUsers", onlineUsersId);
+  })
+
   socket.on('disconnect', () => {
     console.log(socket.id + ' user disconnected');
-    const filteredSocket = [...socketsMap.entries()].find((array) => String(array[1].id) !== String(socket.id));
+    const filteredSocket = [...socketsMap.entries()].find((array) => String(array[1].id) === String(socket.id));
     if (filteredSocket) socketsMap.delete(filteredSocket[0]);
     console.log("socketsMapDis", [...socketsMap.entries()].map(array => [array[0], array[1].id]));
     eventEmitter.removeAllListeners();

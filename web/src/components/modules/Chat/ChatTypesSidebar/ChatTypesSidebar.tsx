@@ -2,13 +2,14 @@ import styles from "./ChatTypesSidebar.module.css";
 import { BsSearch } from "react-icons/bs";
 import Tab from "../../../common/Tab/Tab";
 import PrivateGroupList from "../PrivateGroupList/PrivateGroupList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getConversationsThunk, setConversationType } from "../../../../store/conversationSlice";
-import { AppDispatch } from "../../../../store";
+import { AppDispatch, AppState } from "../../../../store";
 
 export default function ChatTypesSidebar() {
   const dispatch = useDispatch<AppDispatch>();
+  const { type } = useSelector((state: AppState) => state.conversationSlice);
 
   useEffect(() => {
     dispatch(getConversationsThunk())
@@ -22,20 +23,21 @@ export default function ChatTypesSidebar() {
       </form>
       <Tab
         center
+        forceActiveTab={type === "private" ? 0 : type === "group" ? 1 : 0}
         items={[
           {
             label: "Private",
             onClick: () => dispatch(setConversationType("private")),
             component: (
               <PrivateGroupList />
-            )
+            ),
           },
           {
             label: "Group",
             onClick: () => dispatch(setConversationType("group")),
             component: (
               <PrivateGroupList type="group" />
-            )
+            ),
           },
         ]}
       />

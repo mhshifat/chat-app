@@ -8,8 +8,11 @@ import { useEffect } from "react";
 import { useSocket } from "../../../providers/socket";
 import { MessageDocument, addMessage, updateMessageReducer, deleteMessageReducer } from "../../../store/messageSlice";
 import { ConversationDocument, addConversation, updateConversation } from './../../../store/conversationSlice';
+import ChatParticipents from './ChatParticipents/ChatParticipents';
+import { useParams } from "react-router-dom";
 
 export default function ChatLayout({ children }: PropsWithChildren) {
+  const { id } = useParams();
   const socket = useSocket();
   const dispatch = useDispatch();
   const { user } = useSelector((state: AppState) => state.authSlice);
@@ -66,6 +69,7 @@ export default function ChatLayout({ children }: PropsWithChildren) {
       <ChatHandle />
       <ChatTypesSidebar />
       {children}
+      {id && <ChatParticipents />}
     </div>
   )
 }

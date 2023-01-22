@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Tab.module.css";
 
 interface TabProps {
   center?: boolean;
+  forceActiveTab?: number;
   items: { label: string; component: JSX.Element; onClick?: () => void; }[];
 }
 
-export default function Tab({ items, center }: TabProps) {
+export default function Tab({ items, center, forceActiveTab }: TabProps) {
   const [selectedTab, setSelectedTab] = useState(0);
+
+  useEffect(() => {
+    if (forceActiveTab === undefined) return;
+    setSelectedTab(forceActiveTab);
+  }, [forceActiveTab])
 
   return (
     <>
