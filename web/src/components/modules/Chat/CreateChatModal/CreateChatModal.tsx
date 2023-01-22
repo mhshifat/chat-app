@@ -79,6 +79,7 @@ export default function CreateChatModal({ isOpen, closeModal }: CreateChatModalP
             { label: "Group", value: "group" },
           ]}
           onChange={(values) => {
+            if (!values[0]) return;
             setValue("type", values[0].value, { shouldDirty: true });
             setError("type", { message: "" });
           }}

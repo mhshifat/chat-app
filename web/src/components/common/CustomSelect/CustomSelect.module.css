@@ -24,6 +24,7 @@
   height: 100%;
   align-items: center;
   gap: 5px;
+  scroll-snap-type: x mandatory;
 }
 
 .customSelectValues::-webkit-scrollbar {
@@ -36,6 +37,8 @@
   height: 100%;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  scroll-snap-align: start;
 }
 
 .customSelectIcons {

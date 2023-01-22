@@ -39,6 +39,9 @@ export default function CustomSelect({ placeholder = "-- Select --", isMulti, it
   const [openSelectOptions, setOpenSelectOptions] = useState(false);
   const [selectedValues, setSelectedValues] = useState<SelectedValueProps[]>([defaultSelectValues]);
   const [searchValue, setSearchValue] = useState("");
+  const functionsRef = useRef({
+    onChange
+  });
 
   const handleToggleSelect = useCallback(() => {
     setOpenSelectOptions(value => !value);
@@ -52,15 +55,13 @@ export default function CustomSelect({ placeholder = "-- Select --", isMulti, it
     if (isMulti) {
       setSelectedValues(values => {
         const newValues = [...values, currentValue].filter(item => item.label !== placeholder);
-        onChange?.(newValues);
         return newValues;
       });
       return;
     }
-    onChange?.([currentValue]);
     setSelectedValues([currentValue]);
     handleToggleSelect();
-  }, [handleToggleSelect, onChange, isMulti, placeholder]);
+  }, [handleToggleSelect, isMulti, placeholder]);
   const handleOnSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     if (onSearch) return onSearch(e.target.value);
     setSearchValue(e.target.value);
@@ -74,13 +75,18 @@ export default function CustomSelect({ placeholder = "-- Select --", isMulti, it
       const newValues = values.filter(v => v.label !== label);
       if (!newValues.length) newValues.push(defaultSelectValues);
       return newValues;
-    })
+    });
   }, [defaultSelectValues]);
   
   useEffect(() => {
     if (!handleRef.current) return;
     setDefalutSelectWidth(handleRef.current.offsetWidth);
   }, []);
+  
+  useEffect(() => {
+    if (selectedValues.length === 1 && selectedValues[0].label === defaultSelectValues.label) return functionsRef.current?.onChange?.([]);
+    functionsRef.current?.onChange?.(selectedValues);
+  }, [selectedValues, defaultSelectValues]);
 
   return (
     <div className={styles.customSelect}>
