@@ -245,3 +245,13 @@
   font-style: italic;
   color: var(--secondaryTextColor);
 }
+
+.chatMessagesHolderSmilyPicker {
+  position: relative;
+}
+
+.chatMessagesHolderSmilyPicker__options {
+  position: absolute;
+  bottom: 125%;
+  right: 0;
+}

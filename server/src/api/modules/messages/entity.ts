@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { MessageDocument } from "./types";
 import { Conversation } from './../conversations/entity';
 import { User } from "../users/entity";
 
@@ -8,7 +7,7 @@ export class Message extends BaseEntity  {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
+  @Column({ charset: "utf8mb4" })
   message: string;
 
   @ManyToOne(() => Conversation, conversation => conversation.messages)
