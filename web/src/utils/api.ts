@@ -6,6 +6,7 @@ import { CreateConversationFormValues } from "../components/modules/Chat/CreateC
 import { ConversationDocument } from "../store/conversationSlice";
 import { GetMessagesParams, MessageDocument } from "../store/messageSlice";
 import { CreateMessageFormValues, UpdateMessageFormValues } from "../components/modules/Chat/ChatMessagesHolder/ChatMessagesHolderInput";
+import { AddChatParticipentParams } from "../components/modules/Chat/ChatParticipents/AddChatParticipantModal";
 
 const { REACT_APP_API_SERVER } = process.env;
 export const httpClient = axios.create({
@@ -37,6 +38,8 @@ export const getConversations = () => httpClient
   .get<HttpResponse<ConversationDocument[]>>("/api/conversations");
 export const createConversation = (values: CreateConversationFormValues) => httpClient
   .post<HttpResponse<ConversationDocument>>("/api/conversations", values);
+export const addConversationPerticipent = (values: AddChatParticipentParams) => httpClient
+  .post<HttpResponse<ConversationDocument>>("/api/conversations/participents", values);
 
 // Messages API
 export const getMessages = (params: GetMessagesParams) => httpClient

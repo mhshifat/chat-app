@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ConversationService } from "./service";
-import { ConversationBody } from "./types";
+import { AddParticipentToConversation, ConversationBody } from "./types";
 import { RequestResponse } from "../../../utils/response";
 import { eventEmitter } from "../../../utils/events";
 
@@ -13,5 +13,10 @@ export const ConversationController = {
     const doc = await ConversationService.createPrivateConversation(req.body, req.currentUser!);
     eventEmitter.emit("onConversationCreate", doc);
     return RequestResponse.setResponse(res).setStatusCode(201).setData(doc).success();
+  },
+  async addParticipentToConversation(req: Request<any, any, AddParticipentToConversation>, res: Response, next: NextFunction) {
+    const doc = await ConversationService.addParticipentToConversation(req.body, req.currentUser!);
+    eventEmitter.emit("onParticipentAddToConversationCreate", doc);
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
   },
 }

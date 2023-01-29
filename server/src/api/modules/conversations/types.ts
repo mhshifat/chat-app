@@ -18,3 +18,8 @@ export interface ConversationDocument {
   lastMessageSent?: MessageDocument;
   name?: string;
 }
+
+export interface AddParticipentToConversation {
+  conversationId: string;
+  participentId: string;
+}

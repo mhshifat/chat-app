@@ -13,10 +13,13 @@
   background: var(--primaryBgColor);
   gap: 10px;
   height: 60px;
+  justify-content: space-between;
+  padding-right: 20px;
 }
 
 .chatParticipentsHeader svg {
   font-size: 2rem;
+  cursor: pointer;
 }
 
 .chatParticipentsHeader p {
@@ -79,4 +82,12 @@
 
 .chatParticipentsItemOnline::before {
   background: green;
+}
+
+.addChatParticipentModal {
+  width: 100%;
+  min-width: var(--maxElementSize);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }

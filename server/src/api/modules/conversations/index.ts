@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ConversationController } from "./controller";
 import { validateRequest } from "../../middlewares";
-import { CreateConversationValidationSchema } from "./validations";
+import { AddConversationParticipent, CreateConversationValidationSchema } from "./validations";
 
 export const conversationRouter = Router();
 
@@ -10,4 +10,10 @@ conversationRouter.route("/")
   .post(
     [validateRequest(CreateConversationValidationSchema)],
     ConversationController.createConversation
+  );
+
+conversationRouter.route("/participents")
+  .post(
+    [validateRequest(AddConversationParticipent)],
+    ConversationController.addParticipentToConversation
   );

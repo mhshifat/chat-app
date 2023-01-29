@@ -1,17 +1,20 @@
 import { useSelector } from "react-redux";
 import styles from "./ChatParticipents.module.css";
-import { FaUsers } from "react-icons/fa";
 import { AppState } from "../../../../store";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../../../../providers/socket";
+import { HiOutlineUserPlus } from "react-icons/hi2";
+import Modal from "../../../common/Modal/Modal";
+import AddChatParticipentModal from './AddChatParticipantModal';
 
 interface ChatParticipentsProps {}
 
 export default function ChatParticipents({}: ChatParticipentsProps) {
   const { id } = useParams();
   const socket = useSocket();
-  const { conversations } = useSelector((state: AppState) => state.conversationSlice);
+  const { user } = useSelector((state: AppState) => state.authSlice);
+  const { conversations, type } = useSelector((state: AppState) => state.conversationSlice);
   const functionsRef = useRef({
     socket,
   });
@@ -47,8 +50,14 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
   return (
     <aside className={styles.chatParticipents}>
       <header className={styles.chatParticipentsHeader}>
-        <FaUsers />
         <p>Participents</p>
+        {type === "group" && currentConversation?.creator?.id === user?.id && (
+          <Modal
+            modalBody={<AddChatParticipentModal />}
+          >
+            <HiOutlineUserPlus />
+          </Modal>
+        )}
       </header>
       <div className={styles.chatParticipentsBody}>
         <ul className={styles.chatParticipentsList}>

@@ -1,5 +1,5 @@
 import { Conversation } from "./entity"
-import { ConversationBody } from "./types";
+import { AddParticipentToConversation, ConversationBody } from "./types";
 import { HttpError } from "../../../utils/errors";
 import { FindOptionsWhere, In } from "typeorm";
 import { UserService } from "../users/service";
@@ -82,5 +82,24 @@ export const ConversationService = {
     newConversation.lastMessageSent = newMessage;
     await newConversation.save();
     return newConversation;
+  },
+  async addParticipentToConversation(body: AddParticipentToConversation, user: UserDocument) {
+    const conversation = await Conversation
+      .createQueryBuilder("conversation")
+      .leftJoinAndSelect("conversation.creator", "creator")
+      .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
+      .leftJoinAndSelect("conversation.users", "user")
+      .where("conversation.id = :conversationId AND conversation.type = :conversationType AND creator.id = :creatorId", {
+        conversationId: body.conversationId,
+        conversationType: "group",
+        creatorId: user.id
+      })
+      .getOne();
+    if (!conversation) throw new HttpError(400, "Could not add the participent to the conversation!");
+    if (conversation.users.find(u => String(u.id) === String(body.participentId))) throw new HttpError(400, "User already added to the group!");
+    const participent = await UserService.findAndThrowError({ id: body.participentId });
+    conversation.users.push(participent);
+    await conversation.save();
+    return conversation;
   },
 }
