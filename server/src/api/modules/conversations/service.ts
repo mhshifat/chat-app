@@ -5,7 +5,7 @@ import { FindOptionsWhere, In } from "typeorm";
 import { UserService } from "../users/service";
 import { UserDocument } from "../users/types";
 import { MessageService } from "../messages/service";
-import { arrayEquals } from './../../../utils/helpers';
+import { arrayEquals, isDeepEqual } from './../../../utils/helpers';
 
 export const ConversationService = {
   async findAll() {
@@ -54,19 +54,23 @@ export const ConversationService = {
     const emails = body.email.split(",");
     if (emails.includes(user.email)) throw new HttpError(400, "Can't create a conversation with you!");
     const receipients = await UserService.findAll({ email: In(emails) });
-    const listIds = receipients.map(re => re.id).concat(user.id!);
-    if (!receipients.length || receipients.length !== emails.length) throw new HttpError(404, "User(s) not found!");
-    const conversation = await Conversation
-      .createQueryBuilder("conversation")
-      .leftJoinAndSelect("conversation.users", "users")
-      .select("conversation.id", "conversationId")
-      .where("conversation.type = :type", { type: "private" })
-      .andWhere("users.id in (:...ids)", { ids: listIds })
-      .groupBy("conversation.id")
-      .having("count(users.id) = :count", { count: listIds.length })
-      .getRawMany();
+    
+    if (body.type === "private") {
+      const conversation = await Conversation
+        .createQueryBuilder("conversation")
+        .where("conversation.type = 'private'")
+        .leftJoinAndSelect("conversation.users", "user")
+        .andWhere("user.id IN (:...users)", { users: receipients.map(u => +u.id) })
+        .groupBy("conversation.id")
+        .having("COUNT(user.id) = 1")
+        .getOne();
       
-    if (conversation.length) throw new HttpError(400, "Could not create the conversation!");
+      if (conversation) throw new HttpError(400, "Conversation already exists!")
+    } else if (body.type === "group") {
+      const conversation = await Conversation.findOne({ where: { name: body.name, type: "group" } });
+      if (conversation) throw new HttpError(400, "Conversation already exists!")
+    }
+    
     const newConversation = Conversation.create({
       type: body.type,
       creator: user,

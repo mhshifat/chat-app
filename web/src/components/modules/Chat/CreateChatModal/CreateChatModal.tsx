@@ -43,7 +43,7 @@ export default function CreateChatModal({ isOpen, closeModal }: CreateChatModalP
   const dispatch = useDispatch<AppDispatch>();
   const [searchTerm, setSearchTerm] = useState("");
   const { loading } = useSelector((state: AppState) => state.conversationSlice);
-  const { friends } = useSelector((state: AppState) => state.authSlice);
+  const { friends, user } = useSelector((state: AppState) => state.authSlice);
   const { register, handleSubmit, watch, formState: { errors }, setValue, setError } = useForm<CreateConversationFormValues>({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -87,7 +87,7 @@ export default function CreateChatModal({ isOpen, closeModal }: CreateChatModalP
         <CustomSelect
           placeholder="Reciepients"
           searchable={true}
-          items={friends.map(friend => ({
+          items={friends.filter(u => String(u.id) !== String(user?.id)).map(friend => ({
             label: `${friend.first_name} ${friend.last_name} (${friend.email})`,
             value: friend.email
           }))}
