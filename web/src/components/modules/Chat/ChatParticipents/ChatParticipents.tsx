@@ -9,7 +9,7 @@ import Modal from "../../../common/Modal/Modal";
 import AddChatParticipentModal from './AddChatParticipantModal';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Dropdown from "../../../common/Dropdown/Dropdown";
-import { banConversationPerticipentThunk, muteConversationPerticipentThunk, removeConversationPerticipentThunk, unbanConversationPerticipentThunk, unmuteConversationPerticipentThunk } from "../../../../store/conversationSlice";
+import { banConversationPerticipentThunk, muteConversationPerticipentThunk, removeConversationPerticipentThunk, transferConversationOwnershipThunk, unbanConversationPerticipentThunk, unmuteConversationPerticipentThunk } from "../../../../store/conversationSlice";
 
 interface ChatParticipentsProps {}
 
@@ -98,7 +98,13 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
                       }));
                       setOpenDropdown(false);
                     }}>Mute User</li>
-                    <li onClick={() => setOpenDropdown(false)}>Transfer Ownership</li>
+                    <li onClick={() => {
+                      dispatch(transferConversationOwnershipThunk({
+                        conversationId: id!,
+                        participentId: u.id!
+                      }));
+                      setOpenDropdown(false);
+                    }}>Transfer Ownership</li>
                   </ul>
                 )}
               >
@@ -146,7 +152,13 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
                       }));
                       setOpenDropdown(false);
                     }}>Mute User</li>
-                    <li onClick={() => setOpenDropdown(false)}>Transfer Ownership</li>
+                    <li onClick={() => {
+                      dispatch(transferConversationOwnershipThunk({
+                        conversationId: id!,
+                        participentId: u.id!
+                      }));
+                      setOpenDropdown(false);
+                    }}>Transfer Ownership</li>
                   </ul>
                 )}
               >
@@ -194,7 +206,13 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
                       }));
                       setOpenDropdown(false);
                     }}>Unmute User</li>
-                    <li onClick={() => setOpenDropdown(false)}>Transfer Ownership</li>
+                    <li onClick={() => {
+                      dispatch(transferConversationOwnershipThunk({
+                        conversationId: id!,
+                        participentId: u.id!
+                      }));
+                      setOpenDropdown(false);
+                    }}>Transfer Ownership</li>
                   </ul>
                 )}
               >

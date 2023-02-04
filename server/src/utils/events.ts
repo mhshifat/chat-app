@@ -34,6 +34,14 @@ export function handleSocketEvents(socket: Socket) {
     });
   })
 
+  eventEmitter.on("onTransferConversation", (conversation) => {
+    const users = conversation?.users || [];
+    users.forEach((u: UserDocument) => {
+      const uSocket = socketsMap.get(`users-${u.id}`);
+      uSocket?.emit?.("onTransferConversation", conversation);
+    });
+  })
+
   eventEmitter.on("onMessageCreate", ({ message, conversation }) => {
     const users = conversation?.users?.filter?.((u: UserDocument) => String(u.id) !== String(message.writter.id)) || [];
     users.forEach((u: UserDocument) => {

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { RegisterFormValues } from './../components/modules/auth/RegisterForm/RegisterForm';
 import { LoginFormValues } from './../components/modules/auth/LoginForm/LoginForm';
-import { addConversationPerticipent, banConversationPerticipent, createConversation, getConversations, muteConversationPerticipent, removeConversationPerticipent, unbanConversationPerticipent, unmuteConversationPerticipent } from '../utils/api';
+import { addConversationPerticipent, banConversationPerticipent, createConversation, getConversations, muteConversationPerticipent, removeConversationPerticipent, transferConversationOwnership, unbanConversationPerticipent, unmuteConversationPerticipent } from '../utils/api';
 import { CreateConversationFormValues } from '../components/modules/Chat/CreateChatModal/CreateChatModal';
 import { UserDocument } from './authSlice';
 import { MessageDocument } from './messageSlice';
@@ -41,6 +41,7 @@ export const banConversationPerticipentThunk = createAsyncThunk("conversation/pa
 export const unbanConversationPerticipentThunk = createAsyncThunk("conversation/participents/unban", async (values: AddChatParticipentParams) => unbanConversationPerticipent(values.participentId, values.conversationId));
 export const muteConversationPerticipentThunk = createAsyncThunk("conversation/participents/mute", async (values: AddChatParticipentParams) => muteConversationPerticipent(values.participentId, values.conversationId));
 export const unmuteConversationPerticipentThunk = createAsyncThunk("conversation/participents/unmute", async (values: AddChatParticipentParams) => unmuteConversationPerticipent(values.participentId, values.conversationId));
+export const transferConversationOwnershipThunk = createAsyncThunk("conversation/participents/transfer-ownership", async (values: AddChatParticipentParams) => transferConversationOwnership(values.participentId, values.conversationId));
 export const conversationSlice = createSlice({
   name: 'conversations',
   initialState,
@@ -49,7 +50,12 @@ export const conversationSlice = createSlice({
       state.type = payload
     },
     addConversation: (state, { payload }) => {
-      state.conversations.unshift(payload);
+      const findCon = state.conversations.find(con => String(con.id) === String(payload.id));
+      if (findCon) {
+        state.conversations = state.conversations.map(c => c.id === payload.id ? ({...c, ...payload}) : c)
+      } else {
+        state.conversations.unshift(payload);
+      }
       state.conversations.sort((a, b) => new Date(b!.lastMessageSent!.created_at!).getTime() < new Date(a!.lastMessageSent!.created_at!).getTime() ? -1 : 1);
     },
     updateConversation: (state, { payload }) => {
@@ -156,6 +162,12 @@ export const conversationSlice = createSlice({
       }
     })
     .addCase(unmuteConversationPerticipentThunk.rejected, (state) => {
+      state.loading = false;
+    })
+    .addCase(transferConversationOwnershipThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(transferConversationOwnershipThunk.rejected, (state) => {
       state.loading = false;
     })
 })

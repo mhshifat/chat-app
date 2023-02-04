@@ -50,6 +50,8 @@ export const muteConversationPerticipent = (participentId: string, conversationI
   .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}/mute`, { conversationId });
 export const unmuteConversationPerticipent = (participentId: string, conversationId: string) => httpClient
   .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}/unmute`, { conversationId });
+export const transferConversationOwnership = (participentId: string, conversationId: string) => httpClient
+  .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}/transfer-ownership`, { conversationId });
 
 // Messages API
 export const getMessages = (params: GetMessagesParams) => httpClient

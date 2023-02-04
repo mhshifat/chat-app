@@ -157,7 +157,7 @@ export const ConversationService = {
   },
   async unbanParticipentToConversation(body: AddParticipentToConversation, user: UserDocument) {
     const existingParticipent = await UserService.findAndThrowError({ id: body.participentId });
-    if (existingParticipent.id === user.id) throw new HttpError(400, "Can't ban as you are the owner!");
+    if (existingParticipent.id === user.id) throw new HttpError(400, "Can't unban as you are the owner!");
     const conversation = await Conversation
       .createQueryBuilder("conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
@@ -179,7 +179,7 @@ export const ConversationService = {
   },
   async muteParticipentToConversation(body: AddParticipentToConversation, user: UserDocument) {
     const existingParticipent = await UserService.findAndThrowError({ id: body.participentId });
-    if (existingParticipent.id === user.id) throw new HttpError(400, "Can't ban as you are the owner!");
+    if (existingParticipent.id === user.id) throw new HttpError(400, "Can't mute as you are the owner!");
     const conversation = await Conversation
       .createQueryBuilder("conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
@@ -202,7 +202,7 @@ export const ConversationService = {
   },
   async unmuteParticipentToConversation(body: AddParticipentToConversation, user: UserDocument) {
     const existingParticipent = await UserService.findAndThrowError({ id: body.participentId });
-    if (existingParticipent.id === user.id) throw new HttpError(400, "Can't ban as you are the owner!");
+    if (existingParticipent.id === user.id) throw new HttpError(400, "Can't unmute as you are the owner!");
     const conversation = await Conversation
       .createQueryBuilder("conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
@@ -218,6 +218,26 @@ export const ConversationService = {
       .getOne();
     if (!conversation) throw new HttpError(400, "Could not remove participent from the conversation!");
     conversation.muted_users = conversation.muted_users.filter(u => String(u.id) !== String(body.participentId));
+    await conversation.save();
+    return conversation;
+  },
+  async transferOwnership(body: AddParticipentToConversation, user: UserDocument) {
+    const existingParticipent = await UserService.findAndThrowError({ id: body.participentId });
+    if (existingParticipent.id === user.id) throw new HttpError(400, "Can't transfer as you are the owner!");
+    const conversation = await Conversation
+      .createQueryBuilder("conversation")
+      .leftJoinAndSelect("conversation.creator", "creator")
+      .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
+      .leftJoinAndSelect("conversation.users", "users")
+      .leftJoinAndSelect("conversation.muted_users", "muted_users")
+      .leftJoinAndSelect("conversation.banned_users", "bannedUser")
+      .where("conversation.id = :conversationId AND bannedUser.id IS NULL", {
+        conversationId: body.conversationId,
+      })
+      .leftJoinAndSelect("conversation.muted_users", "banned_users")
+      .getOne();
+    if (!conversation) throw new HttpError(400, "Could not remove participent from the conversation!");
+    conversation.creator = existingParticipent;
     await conversation.save();
     return conversation;
   },

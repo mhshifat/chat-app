@@ -59,4 +59,12 @@ export const ConversationController = {
     eventEmitter.emit("onParticipentAddToConversationCreate", doc);
     return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
   },
+  async transferOwnership(req: Request<{ id: string }, any, { conversationId: string }>, res: Response, next: NextFunction) {
+    const doc = await ConversationService.transferOwnership({
+      conversationId: req.body.conversationId,
+      participentId: req.params.id
+    }, req.currentUser!);
+    eventEmitter.emit("onTransferConversation", doc);
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
+  },
 }

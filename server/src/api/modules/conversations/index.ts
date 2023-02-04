@@ -47,3 +47,9 @@ conversationRouter.route("/participents/:id/unmute")
     [validateRequest(RemoveConversationParticipent)],
     ConversationController.unmuteParticipentToConversation
   );
+
+conversationRouter.route("/participents/:id/transfer-ownership")
+  .post(
+    [validateRequest(RemoveConversationParticipent)],
+    ConversationController.transferOwnership
+  );
