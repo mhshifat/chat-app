@@ -12,3 +12,7 @@ export const AddConversationParticipent = Joi.object<AddParticipentToConversatio
   conversationId: Joi.string().required(),
   participentId: Joi.string().required(),
 });
+
+export const RemoveConversationParticipent = Joi.object<AddParticipentToConversation>({
+  conversationId: Joi.string().required(),
+});

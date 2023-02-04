@@ -4,15 +4,18 @@ import styles from "./Dropdown.module.css";
 
 interface DropdownProps {
   open?: boolean;
-  dropdownEl: ((values: { openDropdown: boolean; dropDownWidth?: number; }) => JSX.Element) | JSX.Element;
+  position?: "right-bottom";
+  dropdownEl: ((values: { openDropdown: boolean; dropDownWidth?: number; setOpenDropdown: (value: boolean) => void }) => JSX.Element) | JSX.Element;
   children: ((values: { openDropdown: boolean; dropDownWidth?: number; }) => JSX.Element) | ReactElement;
 }
 
-export default function Dropdown({ children, dropdownEl, open }: DropdownProps) {
+export default function Dropdown({ children, dropdownEl, open, position }: DropdownProps) {
   const [openDropdown, setOpenDropdown] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
-  const dropDownWidth = useRef(0);
+  const optionsRef = useRef<HTMLDivElement>(null);
   
+  const dropDownWidth = useRef(0);
+
   useEffect(() => {
     if (typeof open === "boolean") {
       setOpenDropdown(open);
@@ -27,22 +30,23 @@ export default function Dropdown({ children, dropdownEl, open }: DropdownProps) 
         }:{},
         ref: (el: HTMLElement | null) => {
           triggerRef.current = el;
-          if (dropDownWidth.current === 0 && el) {
+          if (dropDownWidth.current === 0 && el && dropDownWidth.current !== el!.offsetWidth) {
             dropDownWidth.current = el!.offsetWidth;
           }
         }
       })}
       {createPortal((
         <div
-          className={styles.dropdown}
+          ref={optionsRef}
+          className={`${styles.dropdown}`}
           style={{
             ...openDropdown?{
-              top: (triggerRef.current?.getBoundingClientRect().height || -99999999999999) + (triggerRef.current?.getBoundingClientRect().top || -99999999999999),
-              left: (triggerRef.current?.getBoundingClientRect().left || -99999999999999),
+              top: position === "right-bottom" ? (triggerRef.current?.getBoundingClientRect().height || -99999999999999) + (triggerRef.current?.getBoundingClientRect().top || -99999999999999) : (triggerRef.current?.getBoundingClientRect().height || -99999999999999) + (triggerRef.current?.getBoundingClientRect().top || -99999999999999),
+              left: position === "right-bottom" ? (((triggerRef.current?.getBoundingClientRect()?.left || 0) - (optionsRef.current?.offsetWidth || 0)) || -99999999999999) : (triggerRef.current?.getBoundingClientRect().left || -99999999999999),
             }:{},
           }}
         >
-          {!isValidElement(dropdownEl) ? (dropdownEl as any)?.({ openDropdown, dropDownWidth: dropDownWidth.current }) : dropdownEl}
+          {!isValidElement(dropdownEl) ? (dropdownEl as any)?.({ openDropdown, setOpenDropdown, dropDownWidth: dropDownWidth.current }) : dropdownEl}
         </div>
       ), document.querySelector("body")!)}
     </>

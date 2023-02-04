@@ -40,6 +40,8 @@ export const createConversation = (values: CreateConversationFormValues) => http
   .post<HttpResponse<ConversationDocument>>("/api/conversations", values);
 export const addConversationPerticipent = (values: AddChatParticipentParams) => httpClient
   .post<HttpResponse<ConversationDocument>>("/api/conversations/participents", values);
+export const removeConversationPerticipent = (participentId: string, conversationId: string) => httpClient
+  .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}`, { conversationId });
 
 // Messages API
 export const getMessages = (params: GetMessagesParams) => httpClient

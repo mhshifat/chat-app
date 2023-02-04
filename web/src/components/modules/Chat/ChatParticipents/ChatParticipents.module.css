@@ -30,12 +30,18 @@
   flex: 1;
 }
 
+.chatParticipentsBody > p {
+  padding: 0 10px;
+  margin-top: 10px;
+}
+
 .chatParticipentsList {
   list-style: none;
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-top: 10px;
 }
 
 .chatParticipentsItem {
@@ -90,4 +96,22 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+.chatParticipentsItem__options {
+  list-style: none;
+  background: var(--secondaryBgColor);
+  padding: .8em 0;
+  border-radius: .4em;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatParticipentsItem__options > li {
+  padding: .3em 1.2em;
+  cursor: pointer;
+}
+
+.chatParticipentsItem__options > li:hover {
+  background: var(--primaryBgColor);
 }
