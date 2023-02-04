@@ -38,4 +38,8 @@ export class Conversation extends BaseEntity {
   @OneToMany(() => User, user => user.conversation)
   @JoinColumn()
   banned_users: User[];
+
+  @OneToMany(() => User, user => user.muted_conversation)
+  @JoinColumn()
+  muted_users: User[];
 }

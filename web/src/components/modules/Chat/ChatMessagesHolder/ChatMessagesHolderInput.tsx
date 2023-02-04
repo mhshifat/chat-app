@@ -111,6 +111,8 @@ export default function ChatMessagesHolderInput({}: ChatMessagesHolderInputProps
 			socketRef?.off("stopedTyping", handleUserTypingStoped);
 		};
 	}, [id]);
+
+  if (getConversation?.banned_users?.find(bu => String(bu.id) === String(user?.id)) || getConversation?.muted_users?.find(mu => String(mu.id) === String(user?.id))) return null;
 	return (
 		<>
 			{!!getTypingText.length && (

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { RegisterFormValues } from './../components/modules/auth/RegisterForm/RegisterForm';
 import { LoginFormValues } from './../components/modules/auth/LoginForm/LoginForm';
-import { addConversationPerticipent, banConversationPerticipent, createConversation, getConversations, removeConversationPerticipent, unbanConversationPerticipent } from '../utils/api';
+import { addConversationPerticipent, banConversationPerticipent, createConversation, getConversations, muteConversationPerticipent, removeConversationPerticipent, unbanConversationPerticipent, unmuteConversationPerticipent } from '../utils/api';
 import { CreateConversationFormValues } from '../components/modules/Chat/CreateChatModal/CreateChatModal';
 import { UserDocument } from './authSlice';
 import { MessageDocument } from './messageSlice';
@@ -16,6 +16,7 @@ export interface ConversationDocument {
   creator?: UserDocument;
   users?: UserDocument[];
   banned_users?: UserDocument[];
+  muted_users?: UserDocument[];
   lastMessageSent?: MessageDocument;
   name?: string;
 }
@@ -38,6 +39,8 @@ export const addConversationPerticipentThunk = createAsyncThunk("conversation/pa
 export const removeConversationPerticipentThunk = createAsyncThunk("conversation/participents/remove", async (values: AddChatParticipentParams) => removeConversationPerticipent(values.participentId, values.conversationId));
 export const banConversationPerticipentThunk = createAsyncThunk("conversation/participents/ban", async (values: AddChatParticipentParams) => banConversationPerticipent(values.participentId, values.conversationId));
 export const unbanConversationPerticipentThunk = createAsyncThunk("conversation/participents/unban", async (values: AddChatParticipentParams) => unbanConversationPerticipent(values.participentId, values.conversationId));
+export const muteConversationPerticipentThunk = createAsyncThunk("conversation/participents/mute", async (values: AddChatParticipentParams) => muteConversationPerticipent(values.participentId, values.conversationId));
+export const unmuteConversationPerticipentThunk = createAsyncThunk("conversation/participents/unmute", async (values: AddChatParticipentParams) => unmuteConversationPerticipent(values.participentId, values.conversationId));
 export const conversationSlice = createSlice({
   name: 'conversations',
   initialState,
@@ -129,6 +132,30 @@ export const conversationSlice = createSlice({
       }
     })
     .addCase(unbanConversationPerticipentThunk.rejected, (state) => {
+      state.loading = false;
+    })
+    .addCase(muteConversationPerticipentThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(muteConversationPerticipentThunk.fulfilled, (state, action) => {
+      if (action.payload.data.success) {
+        state.loading = false;
+        state.conversations = state.conversations.map(c => c.id === action.payload.data.result.id ? ({...c, ...action.payload.data.result}) : c).sort((a, b) => String(b.id) === String(action.payload.data.result.id) ? 1 : -1);
+      }
+    })
+    .addCase(muteConversationPerticipentThunk.rejected, (state) => {
+      state.loading = false;
+    })
+    .addCase(unmuteConversationPerticipentThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(unmuteConversationPerticipentThunk.fulfilled, (state, action) => {
+      if (action.payload.data.success) {
+        state.loading = false;
+        state.conversations = state.conversations.map(c => c.id === action.payload.data.result.id ? ({...c, ...action.payload.data.result}) : c).sort((a, b) => String(b.id) === String(action.payload.data.result.id) ? 1 : -1);
+      }
+    })
+    .addCase(unmuteConversationPerticipentThunk.rejected, (state) => {
       state.loading = false;
     })
 })

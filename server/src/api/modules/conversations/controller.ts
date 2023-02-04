@@ -43,4 +43,20 @@ export const ConversationController = {
     eventEmitter.emit("onParticipentAddToConversationCreate", doc);
     return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
   },
+  async muteParticipentToConversation(req: Request<{ id: string }, any, { conversationId: string }>, res: Response, next: NextFunction) {
+    const doc = await ConversationService.muteParticipentToConversation({
+      conversationId: req.body.conversationId,
+      participentId: req.params.id
+    }, req.currentUser!);
+    eventEmitter.emit("onParticipentAddToConversationCreate", doc);
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
+  },
+  async unmuteParticipentToConversation(req: Request<{ id: string }, any, { conversationId: string }>, res: Response, next: NextFunction) {
+    const doc = await ConversationService.unmuteParticipentToConversation({
+      conversationId: req.body.conversationId,
+      participentId: req.params.id
+    }, req.currentUser!);
+    eventEmitter.emit("onParticipentAddToConversationCreate", doc);
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
+  },
 }

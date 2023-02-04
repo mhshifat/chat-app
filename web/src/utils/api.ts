@@ -46,6 +46,10 @@ export const banConversationPerticipent = (participentId: string, conversationId
   .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}/ban`, { conversationId });
 export const unbanConversationPerticipent = (participentId: string, conversationId: string) => httpClient
   .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}/unban`, { conversationId });
+export const muteConversationPerticipent = (participentId: string, conversationId: string) => httpClient
+  .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}/mute`, { conversationId });
+export const unmuteConversationPerticipent = (participentId: string, conversationId: string) => httpClient
+  .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}/unmute`, { conversationId });
 
 // Messages API
 export const getMessages = (params: GetMessagesParams) => httpClient

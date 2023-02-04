@@ -35,4 +35,8 @@ export class User extends BaseEntity {
   @ManyToOne(() => Conversation, conversation => conversation.banned_users)
   @JoinColumn()
   conversation: Conversation;
+
+  @ManyToOne(() => Conversation, conversation => conversation.muted_users)
+  @JoinColumn()
+  muted_conversation: Conversation;
 }
