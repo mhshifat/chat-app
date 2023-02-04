@@ -27,4 +27,20 @@ export const ConversationController = {
     eventEmitter.emit("onParticipentAddToConversationCreate", doc);
     return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
   },
+  async banParticipentToConversation(req: Request<{ id: string }, any, { conversationId: string }>, res: Response, next: NextFunction) {
+    const doc = await ConversationService.banParticipentToConversation({
+      conversationId: req.body.conversationId,
+      participentId: req.params.id
+    }, req.currentUser!);
+    eventEmitter.emit("onParticipentAddToConversationCreate", doc);
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
+  },
+  async unbanParticipentToConversation(req: Request<{ id: string }, any, { conversationId: string }>, res: Response, next: NextFunction) {
+    const doc = await ConversationService.unbanParticipentToConversation({
+      conversationId: req.body.conversationId,
+      participentId: req.params.id
+    }, req.currentUser!);
+    eventEmitter.emit("onParticipentAddToConversationCreate", doc);
+    return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
+  },
 }

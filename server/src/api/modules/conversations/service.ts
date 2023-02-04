@@ -34,6 +34,7 @@ export const ConversationService = {
       .andWhere("users.id IN (:...ids)", { ids: [authUserId] })
       .select("conversation", "conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
+      .leftJoinAndSelect("conversation.banned_users", "banned_users")
       .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
       .leftJoinAndSelect("conversation.users", "allUsers")
       .getMany();
@@ -47,6 +48,7 @@ export const ConversationService = {
       .leftJoinAndSelect("conversation.creator", "creator")
       .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
       .leftJoinAndSelect("conversation.users", "users")
+      .leftJoinAndSelect("conversation.banned_users", "banned_users")
       .getMany();
     return docs;
   },
@@ -91,6 +93,7 @@ export const ConversationService = {
     const conversation = await Conversation
       .createQueryBuilder("conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
+      .leftJoinAndSelect("conversation.banned_users", "banned_users")
       .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
       .leftJoinAndSelect("conversation.users", "user")
       .where("conversation.id = :conversationId AND conversation.type = :conversationType AND creator.id = :creatorId", {
@@ -112,6 +115,7 @@ export const ConversationService = {
     const conversation = await Conversation
       .createQueryBuilder("conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
+      .leftJoinAndSelect("conversation.banned_users", "banned_users")
       .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
       .leftJoinAndSelect("conversation.users", "user")
       .where("conversation.id = :conversationId AND user.id IN (:...ids)", {
@@ -122,6 +126,48 @@ export const ConversationService = {
       .getOne();
     if (!conversation) throw new HttpError(400, "Could not remove participent from the conversation!");
     conversation.users = conversation.users.filter(u => String(u.id) !== String(body.participentId));
+    await conversation.save();
+    return conversation;
+  },
+  async banParticipentToConversation(body: AddParticipentToConversation, user: UserDocument) {
+    const existingParticipent = await UserService.findAndThrowError({ id: body.participentId });
+    if (existingParticipent.id === user.id) throw new HttpError(400, "Can't ban as you are the owner!");
+    const conversation = await Conversation
+      .createQueryBuilder("conversation")
+      .leftJoinAndSelect("conversation.creator", "creator")
+      .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
+      .leftJoinAndSelect("conversation.banned_users", "banned_users")
+      .leftJoinAndSelect("conversation.users", "user")
+      .where("conversation.id = :conversationId AND user.id IN (:...ids)", {
+        conversationId: body.conversationId,
+        ids: [body.participentId]
+      })
+      .leftJoinAndSelect("conversation.users", "users")
+      .getOne();
+    if (!conversation) throw new HttpError(400, "Could not remove participent from the conversation!");
+    conversation.users = conversation.users.filter(u => String(u.id) !== String(body.participentId));
+    conversation.banned_users = [...conversation.banned_users, existingParticipent];
+    await conversation.save();
+    return conversation;
+  },
+  async unbanParticipentToConversation(body: AddParticipentToConversation, user: UserDocument) {
+    const existingParticipent = await UserService.findAndThrowError({ id: body.participentId });
+    if (existingParticipent.id === user.id) throw new HttpError(400, "Can't ban as you are the owner!");
+    const conversation = await Conversation
+      .createQueryBuilder("conversation")
+      .leftJoinAndSelect("conversation.creator", "creator")
+      .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
+      .leftJoinAndSelect("conversation.users", "users")
+      .leftJoinAndSelect("conversation.banned_users", "bannedUser")
+      .where("conversation.id = :conversationId AND bannedUser.id IN (:...ids)", {
+        conversationId: body.conversationId,
+        ids: [body.participentId]
+      })
+      .leftJoinAndSelect("conversation.banned_users", "banned_users")
+      .getOne();
+    if (!conversation) throw new HttpError(400, "Could not remove participent from the conversation!");
+    conversation.banned_users = conversation.banned_users.filter(u => String(u.id) !== String(body.participentId));
+    conversation.users = [...conversation.users, existingParticipent];
     await conversation.save();
     return conversation;
   },

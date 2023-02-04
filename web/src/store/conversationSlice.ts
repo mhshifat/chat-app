@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { RegisterFormValues } from './../components/modules/auth/RegisterForm/RegisterForm';
 import { LoginFormValues } from './../components/modules/auth/LoginForm/LoginForm';
-import { addConversationPerticipent, createConversation, getConversations, removeConversationPerticipent } from '../utils/api';
+import { addConversationPerticipent, banConversationPerticipent, createConversation, getConversations, removeConversationPerticipent, unbanConversationPerticipent } from '../utils/api';
 import { CreateConversationFormValues } from '../components/modules/Chat/CreateChatModal/CreateChatModal';
 import { UserDocument } from './authSlice';
 import { MessageDocument } from './messageSlice';
@@ -15,6 +15,7 @@ export interface ConversationDocument {
   type: "private" | "group";
   creator?: UserDocument;
   users?: UserDocument[];
+  banned_users?: UserDocument[];
   lastMessageSent?: MessageDocument;
   name?: string;
 }
@@ -35,6 +36,8 @@ export const getConversationsThunk = createAsyncThunk("conversation/get", async 
 export const createConversationThunk = createAsyncThunk("conversation/create", async (values: CreateConversationFormValues) => createConversation(values));
 export const addConversationPerticipentThunk = createAsyncThunk("conversation/participents/add", async (values: AddChatParticipentParams) => addConversationPerticipent(values));
 export const removeConversationPerticipentThunk = createAsyncThunk("conversation/participents/remove", async (values: AddChatParticipentParams) => removeConversationPerticipent(values.participentId, values.conversationId));
+export const banConversationPerticipentThunk = createAsyncThunk("conversation/participents/ban", async (values: AddChatParticipentParams) => banConversationPerticipent(values.participentId, values.conversationId));
+export const unbanConversationPerticipentThunk = createAsyncThunk("conversation/participents/unban", async (values: AddChatParticipentParams) => unbanConversationPerticipent(values.participentId, values.conversationId));
 export const conversationSlice = createSlice({
   name: 'conversations',
   initialState,
@@ -102,6 +105,30 @@ export const conversationSlice = createSlice({
       }
     })
     .addCase(removeConversationPerticipentThunk.rejected, (state) => {
+      state.loading = false;
+    })
+    .addCase(banConversationPerticipentThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(banConversationPerticipentThunk.fulfilled, (state, action) => {
+      if (action.payload.data.success) {
+        state.loading = false;
+        state.conversations = state.conversations.map(c => c.id === action.payload.data.result.id ? ({...c, ...action.payload.data.result}) : c).sort((a, b) => String(b.id) === String(action.payload.data.result.id) ? 1 : -1);
+      }
+    })
+    .addCase(banConversationPerticipentThunk.rejected, (state) => {
+      state.loading = false;
+    })
+    .addCase(unbanConversationPerticipentThunk.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(unbanConversationPerticipentThunk.fulfilled, (state, action) => {
+      if (action.payload.data.success) {
+        state.loading = false;
+        state.conversations = state.conversations.map(c => c.id === action.payload.data.result.id ? ({...c, ...action.payload.data.result}) : c).sort((a, b) => String(b.id) === String(action.payload.data.result.id) ? 1 : -1);
+      }
+    })
+    .addCase(unbanConversationPerticipentThunk.rejected, (state) => {
       state.loading = false;
     })
 })

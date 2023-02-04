@@ -34,4 +34,8 @@ export class Conversation extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at: Date
+
+  @OneToMany(() => User, user => user.conversation)
+  @JoinColumn()
+  banned_users: User[];
 }

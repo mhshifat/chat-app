@@ -44,7 +44,7 @@ export default function AddChatParticipentModal({ closeModal }: { closeModal?: (
       <CustomSelect
         placeholder="Reciepient"
         searchable={true}
-        items={getFriends.map(friend => ({
+        items={getFriends.filter(fr => !currentConversation?.banned_users?.find(bu => String(bu.id) === String(fr.id))).map(friend => ({
           label: `${friend.first_name} ${friend.last_name} (${friend.email})`,
           value: friend!.id + ""
         }))}

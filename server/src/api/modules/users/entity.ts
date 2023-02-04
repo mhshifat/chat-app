@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { UserDocument } from "./types";
 import { Conversation } from "../conversations/entity";
 import { Message } from "../messages/entity";
@@ -31,4 +31,8 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at: Date
+
+  @ManyToOne(() => Conversation, conversation => conversation.banned_users)
+  @JoinColumn()
+  conversation: Conversation;
 }

@@ -23,3 +23,15 @@ conversationRouter.route("/participents/:id")
     [validateRequest(RemoveConversationParticipent)],
     ConversationController.removeParticipentToConversation
   );
+
+conversationRouter.route("/participents/:id/ban")
+  .post(
+    [validateRequest(RemoveConversationParticipent)],
+    ConversationController.banParticipentToConversation
+  );
+
+conversationRouter.route("/participents/:id/unban")
+  .post(
+    [validateRequest(RemoveConversationParticipent)],
+    ConversationController.unbanParticipentToConversation
+  );

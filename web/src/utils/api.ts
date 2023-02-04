@@ -42,6 +42,10 @@ export const addConversationPerticipent = (values: AddChatParticipentParams) => 
   .post<HttpResponse<ConversationDocument>>("/api/conversations/participents", values);
 export const removeConversationPerticipent = (participentId: string, conversationId: string) => httpClient
   .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}`, { conversationId });
+export const banConversationPerticipent = (participentId: string, conversationId: string) => httpClient
+  .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}/ban`, { conversationId });
+export const unbanConversationPerticipent = (participentId: string, conversationId: string) => httpClient
+  .post<HttpResponse<ConversationDocument>>(`/api/conversations/participents/${participentId}/unban`, { conversationId });
 
 // Messages API
 export const getMessages = (params: GetMessagesParams) => httpClient
