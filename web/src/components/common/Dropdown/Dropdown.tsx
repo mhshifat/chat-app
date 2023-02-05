@@ -4,7 +4,7 @@ import styles from "./Dropdown.module.css";
 
 interface DropdownProps {
   open?: boolean;
-  position?: "right-bottom";
+  position?: "right-bottom" | "right-top";
   dropdownEl: ((values: { openDropdown: boolean; dropDownWidth?: number; setOpenDropdown: (value: boolean) => void }) => JSX.Element) | JSX.Element;
   children: ((values: { openDropdown: boolean; dropDownWidth?: number; }) => JSX.Element) | ReactElement;
 }
@@ -41,8 +41,8 @@ export default function Dropdown({ children, dropdownEl, open, position }: Dropd
           className={`${styles.dropdown}`}
           style={{
             ...openDropdown?{
-              top: position === "right-bottom" ? (triggerRef.current?.getBoundingClientRect().height || -99999999999999) + (triggerRef.current?.getBoundingClientRect().top || -99999999999999) : (triggerRef.current?.getBoundingClientRect().height || -99999999999999) + (triggerRef.current?.getBoundingClientRect().top || -99999999999999),
-              left: position === "right-bottom" ? (((triggerRef.current?.getBoundingClientRect()?.left || 0) - (optionsRef.current?.offsetWidth || 0)) || -99999999999999) : (triggerRef.current?.getBoundingClientRect().left || -99999999999999),
+              top: position === "right-top" ? (triggerRef.current?.getBoundingClientRect().top || -99999999999999) : position === "right-bottom" ? (triggerRef.current?.getBoundingClientRect().height || -99999999999999) + (triggerRef.current?.getBoundingClientRect().top || -99999999999999) : (triggerRef.current?.getBoundingClientRect().height || -99999999999999) + (triggerRef.current?.getBoundingClientRect().top || -99999999999999),
+              left: position === "right-top" ? (((triggerRef.current?.getBoundingClientRect()?.left || 0) - (optionsRef.current?.offsetWidth || 0)) || -99999999999999) - 20 : position === "right-bottom" ? (((triggerRef.current?.getBoundingClientRect()?.left || 0) - (optionsRef.current?.offsetWidth || 0)) || -99999999999999) : (triggerRef.current?.getBoundingClientRect().left || -99999999999999),
             }:{},
           }}
         >

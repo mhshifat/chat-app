@@ -115,3 +115,87 @@
 .chatParticipentsItem__options > li:hover {
   background: var(--primaryBgColor);
 }
+
+.chatParticipentsItemProfileView {
+  background: #0D0D0D;
+  border-radius: 10px;
+  width: 264px;
+  max-width: 100%;
+  overflow: hidden;
+  display: block;
+}
+
+.chatParticipentsItemProfileView > img {
+  width: 100%;
+  height: 110px;
+  display: block;
+  object-fit: cover;
+}
+
+.chatParticipentsItemProfileView > header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin-top: -36px;
+}
+
+.chatParticipentsItemProfileView > header > div:first-child {
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+}
+
+.chatParticipentsItemProfileView > header > div:first-child > img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.chatParticipentsItemProfileView > header > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chatParticipentsItemProfileView > header > div:last-child > span > svg {
+  font-size: 1.4em;
+  cursor: pointer;
+}
+
+.chatParticipentsItemProfileView > div {
+  padding: 20px;
+}
+
+.chatParticipentsItemProfileView > div > h3 {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  color: #FFFFFF;
+}
+
+.chatParticipentsItemProfileView > div > h6 {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #848484;
+  margin-top: 13px;
+}
+
+.chatParticipentsItemProfileView > div > p {
+  background: #141414;
+  border-radius: 10px;
+  padding: 11px 16px;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #FFFFFF;
+  margin-top: 9px;
+}

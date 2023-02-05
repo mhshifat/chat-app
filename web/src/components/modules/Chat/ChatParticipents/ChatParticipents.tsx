@@ -10,6 +10,9 @@ import AddChatParticipentModal from './AddChatParticipantModal';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import Dropdown from "../../../common/Dropdown/Dropdown";
 import { banConversationPerticipentThunk, muteConversationPerticipentThunk, removeConversationPerticipentThunk, transferConversationOwnershipThunk, unbanConversationPerticipentThunk, unmuteConversationPerticipentThunk } from "../../../../store/conversationSlice";
+import { BiPhoneCall } from "react-icons/bi";
+import { TbMessage } from "react-icons/tb";
+import { HiOutlineUsers } from "react-icons/hi";
 
 interface ChatParticipentsProps {}
 
@@ -68,9 +71,41 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
         <ul className={styles.chatParticipentsList}>
           {currentConversation?.users?.filter(u => onlineUsersId.includes(String(u.id))).filter(u => !currentConversation.muted_users?.find(bu => String(bu.id) === String(u.id))).map(u => (
             <li key={u.id} className={styles.chatParticipentsItem}>
-              <span className={`${styles.chatParticipentsItem__img} ${styles.chatParticipentsItemOnline}`}>
-                <img src="https://picsum.photos/200" alt="" />
-              </span>
+              <Dropdown
+                position="right-top"
+                dropdownEl={({ setOpenDropdown }) => (
+                  <article className={styles.chatParticipentsItemProfileView}>
+                    <img src="https://images.pexels.com/photos/2666598/pexels-photo-2666598.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
+                    <header>
+                      <div>
+                        <img src="https://picsum.photos/200" alt="" />
+                      </div>
+
+                      <div>
+                        <span>
+                          <BiPhoneCall />
+                        </span>
+                        <span>
+                          <TbMessage />
+                        </span>
+                        <span>
+                          <HiOutlineUsers />
+                        </span>
+                      </div>
+                    </header>
+
+                    <div>
+                      <h3>{u.first_name} {u.last_name}</h3>
+                      <h6>About Me</h6>
+                      <p>No bio found</p>
+                    </div>
+                  </article>
+                )}
+              >
+                <span className={`${styles.chatParticipentsItem__img} ${styles.chatParticipentsItemOnline}`}>
+                  <img src="https://picsum.photos/200" alt="" />
+                </span>
+              </Dropdown>
               <span className={styles.chatParticipentsItem__title}>{u.first_name} {u.last_name}</span>
 
               {user?.id !== u?.id && currentConversation?.creator?.id === user?.id && <Dropdown
@@ -122,9 +157,41 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
         <ul className={styles.chatParticipentsList}>
           {currentConversation?.users?.filter(u => !onlineUsersId.includes(String(u.id))).filter(u => !currentConversation.muted_users?.find(bu => String(bu.id) === String(u.id))).map(u => (
             <li key={u.id} className={styles.chatParticipentsItem}>
-              <span className={`${styles.chatParticipentsItem__img}`}>
-                <img src="https://picsum.photos/200" alt="" />
-              </span>
+              <Dropdown
+                position="right-top"
+                dropdownEl={({ setOpenDropdown }) => (
+                  <article className={styles.chatParticipentsItemProfileView}>
+                    <img src="https://images.pexels.com/photos/2666598/pexels-photo-2666598.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
+                    <header>
+                      <div>
+                        <img src="https://picsum.photos/200" alt="" />
+                      </div>
+
+                      <div>
+                        <span>
+                          <BiPhoneCall />
+                        </span>
+                        <span>
+                          <TbMessage />
+                        </span>
+                        <span>
+                          <HiOutlineUsers />
+                        </span>
+                      </div>
+                    </header>
+
+                    <div>
+                      <h3>{u.first_name} {u.last_name}</h3>
+                      <h6>About Me</h6>
+                      <p>No bio found</p>
+                    </div>
+                  </article>
+                )}
+              >
+                <span className={`${styles.chatParticipentsItem__img}`}>
+                  <img src="https://picsum.photos/200" alt="" />
+                </span>
+              </Dropdown>
               <span className={styles.chatParticipentsItem__title}>{u.first_name} {u.last_name}</span>
 
               {user?.id !== u?.id && currentConversation?.creator?.id === user?.id && <Dropdown
@@ -176,9 +243,41 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
         <ul className={styles.chatParticipentsList}>
           {currentConversation?.muted_users?.map(u => (
             <li key={u.id} className={styles.chatParticipentsItem}>
-              <span className={`${styles.chatParticipentsItem__img} ${onlineUsersId.includes(String(u.id)) ? styles.chatParticipentsItemOnline : ""}`}>
-                <img src="https://picsum.photos/200" alt="" />
-              </span>
+              <Dropdown
+                position="right-top"
+                dropdownEl={({ setOpenDropdown }) => (
+                  <article className={styles.chatParticipentsItemProfileView}>
+                    <img src="https://images.pexels.com/photos/2666598/pexels-photo-2666598.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
+                    <header>
+                      <div>
+                        <img src="https://picsum.photos/200" alt="" />
+                      </div>
+
+                      <div>
+                        <span>
+                          <BiPhoneCall />
+                        </span>
+                        <span>
+                          <TbMessage />
+                        </span>
+                        <span>
+                          <HiOutlineUsers />
+                        </span>
+                      </div>
+                    </header>
+
+                    <div>
+                      <h3>{u.first_name} {u.last_name}</h3>
+                      <h6>About Me</h6>
+                      <p>No bio found</p>
+                    </div>
+                  </article>
+                )}
+              >
+                <span className={`${styles.chatParticipentsItem__img} ${onlineUsersId.includes(String(u.id)) ? styles.chatParticipentsItemOnline : ""}`}>
+                  <img src="https://picsum.photos/200" alt="" />
+                </span>
+              </Dropdown>
               <span className={styles.chatParticipentsItem__title}>{u.first_name} {u.last_name}</span>
 
               {user?.id !== u?.id && currentConversation?.creator?.id === user?.id && <Dropdown
@@ -232,9 +331,41 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
             <ul className={styles.chatParticipentsList}>
               {currentConversation?.banned_users?.map(u => (
                 <li key={u.id} className={styles.chatParticipentsItem}>
-                  <span className={`${styles.chatParticipentsItem__img} ${onlineUsersId.includes(String(u.id)) ? styles.chatParticipentsItemOnline : ""}`}>
-                    <img src="https://picsum.photos/200" alt="" />
-                  </span>
+                  <Dropdown
+                    position="right-top"
+                    dropdownEl={({ setOpenDropdown }) => (
+                      <article className={styles.chatParticipentsItemProfileView}>
+                        <img src="https://images.pexels.com/photos/2666598/pexels-photo-2666598.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" />
+                        <header>
+                          <div>
+                            <img src="https://picsum.photos/200" alt="" />
+                          </div>
+
+                          <div>
+                            <span>
+                              <BiPhoneCall />
+                            </span>
+                            <span>
+                              <TbMessage />
+                            </span>
+                            <span>
+                              <HiOutlineUsers />
+                            </span>
+                          </div>
+                        </header>
+
+                        <div>
+                          <h3>{u.first_name} {u.last_name}</h3>
+                          <h6>About Me</h6>
+                          <p>No bio found</p>
+                        </div>
+                      </article>
+                    )}
+                  >
+                    <span className={`${styles.chatParticipentsItem__img} ${onlineUsersId.includes(String(u.id)) ? styles.chatParticipentsItemOnline : ""}`}>
+                      <img src="https://picsum.photos/200" alt="" />
+                    </span>
+                  </Dropdown>
                   <span className={styles.chatParticipentsItem__title}>{u.first_name} {u.last_name}</span>
 
                   {user?.id !== u?.id && currentConversation?.creator?.id === user?.id && <Dropdown
