@@ -29,7 +29,7 @@ export default function PrivateGroupList({ type = "private" }: PrivateGroupListP
 
   return (
     <ul className={styles.privateGroupList}>
-      {filterConversationsAsType.map((con) => (
+      {filterConversationsAsType.filter(u => !u.banned_users?.find(bu => String(bu.id) === String(user?.id))).map((con) => (
         <li
           key={con.id}
           // className={styles.privateGroupList__new}

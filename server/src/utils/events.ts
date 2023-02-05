@@ -28,7 +28,8 @@ export function handleSocketEvents(socket: Socket) {
 
   eventEmitter.on("onParticipentAddToConversationCreate", (conversation) => {
     const users = conversation?.users?.filter?.((u: UserDocument) => String(u.id) !== String(conversation.creator.id)) || [];
-    users.forEach((u: UserDocument) => {
+    const bnUsers = conversation?.banned_users || [];
+    users.concat(bnUsers).forEach((u: UserDocument) => {
       const uSocket = socketsMap.get(`users-${u.id}`);
       uSocket?.emit?.("onParticipentAddToConversationCreate", conversation);
     });

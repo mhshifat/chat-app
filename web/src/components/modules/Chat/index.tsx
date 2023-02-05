@@ -59,6 +59,7 @@ export default function ChatLayout({ children }: PropsWithChildren) {
     }
     socketRef.socket?.on("onParticipentAddToConversationCreate", handlePartAddToConversation);
     const handleTransferConversation = (conversation: ConversationDocument) => {
+      console.log({ conversation });
       functionsRef.current.dispatch(addConversation(conversation));
     }
     socketRef.socket?.on("onTransferConversation", handleTransferConversation);
