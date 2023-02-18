@@ -58,6 +58,10 @@ export default function ChatLayout({ children }: PropsWithChildren) {
       functionsRef.current.dispatch(addConversation(conversation));
     }
     socketRef.socket?.on("onParticipentAddToConversationCreate", handlePartAddToConversation);
+    const handlePartRemoveFromConversation = (conversation: ConversationDocument) => {
+      functionsRef.current.dispatch(addConversation(conversation));
+    }
+    socketRef.socket?.on("onParticipentRemoveFromConversation", handlePartRemoveFromConversation);
     const handleTransferConversation = (conversation: ConversationDocument) => {
       console.log({ conversation });
       functionsRef.current.dispatch(addConversation(conversation));
@@ -71,6 +75,7 @@ export default function ChatLayout({ children }: PropsWithChildren) {
       socketRef.socket?.off("onMessageDelete", handleNewMsgDelete);
       socketRef.socket?.off("onConversationCreate", handleNewConversation);
       socketRef.socket?.off("onParticipentAddToConversationCreate", handlePartAddToConversation);
+      socketRef.socket?.off("onParticipentRemoveFromConversation", handlePartRemoveFromConversation);
       socketRef.socket?.off("onTransferConversation", handleTransferConversation);
     }
   }, [user?.id]);

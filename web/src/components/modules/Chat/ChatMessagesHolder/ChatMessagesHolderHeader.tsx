@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, AppState } from "../../../../store";
 import { useParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
-import { setConversationType } from "../../../../store/conversationSlice";
+import { removeConversationPerticipentThunk, setConversationType } from "../../../../store/conversationSlice";
 
 interface ChatMessagesHolderHeaderProps {}
 
@@ -25,11 +25,18 @@ export default function ChatMessagesHolderHeader({}: ChatMessagesHolderHeaderPro
   useEffect(() => {
     dispatch(setConversationType(currentConversation?.type || "private"));
   }, [dispatch, currentConversation, id])
+  
   return (
     <div className={styles.chatMessagesHolderHeader}>
       <span>
         <img src={currentConversation?.type === "group" ? "https://picsum.photos/200" : `${getRecipient && 'avatar' in getRecipient ? getRecipient.avatar : "https://picsum.photos/200"}`} alt="" />
         <h3>{currentConversation?.type === "group" ? currentConversation.name : `${getRecipient?.first_name} ${getRecipient?.last_name}`}</h3>
+        {currentConversation?.type === "group" && currentConversation.creator?.id !== user?.id && <button className={styles.chatMessagesHolderLeaveBtn} onClick={() => {
+          dispatch(removeConversationPerticipentThunk({
+            conversationId: id!,
+            participentId: user?.id!
+          }));
+        }}>Leave Group</button>}
       </span>
 
       <ul>

@@ -118,7 +118,7 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
                         participentId: u.id!
                       }));
                       setOpenDropdown(false)
-                    }}>Kisck User</li>
+                    }}>Kick User</li>
                     <li onClick={() => {
                       dispatch(banConversationPerticipentThunk({
                         conversationId: id!,
@@ -204,7 +204,7 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
                         participentId: u.id!
                       }));
                       setOpenDropdown(false)
-                    }}>Kisck User</li>
+                    }}>Kick User</li>
                     <li onClick={() => {
                       dispatch(banConversationPerticipentThunk({
                         conversationId: id!,
@@ -290,7 +290,7 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
                         participentId: u.id!
                       }));
                       setOpenDropdown(false)
-                    }}>Kisck User</li>
+                    }}>Kick User</li>
                     <li onClick={() => {
                       dispatch(banConversationPerticipentThunk({
                         conversationId: id!,
@@ -378,7 +378,7 @@ export default function ChatParticipents({}: ChatParticipentsProps) {
                             participentId: u.id!
                           }));
                           setOpenDropdown(false)
-                        }}>Kisck User</li>
+                        }}>Kick User</li>
                         <li onClick={() => {
                           dispatch(unbanConversationPerticipentThunk({
                             conversationId: id!,

@@ -255,3 +255,14 @@
   bottom: 125%;
   right: 0;
 }
+
+.chatMessagesHolderLeaveBtn {
+  background: transparent;
+  margin-left: 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid var(--dangerColor);
+  color: var(--dangerColor);
+  padding: .5em .8em;
+}

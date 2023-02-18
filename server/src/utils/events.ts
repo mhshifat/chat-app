@@ -28,10 +28,20 @@ export function handleSocketEvents(socket: Socket) {
 
   eventEmitter.on("onParticipentAddToConversationCreate", (conversation) => {
     const users = conversation?.users?.filter?.((u: UserDocument) => String(u.id) !== String(conversation.creator.id)) || [];
+    
     const bnUsers = conversation?.banned_users || [];
     users.concat(bnUsers).forEach((u: UserDocument) => {
       const uSocket = socketsMap.get(`users-${u.id}`);
       uSocket?.emit?.("onParticipentAddToConversationCreate", conversation);
+    });
+  })
+
+  eventEmitter.on("onParticipentRemoveFromConversation", (conversation) => {
+    const users = conversation?.users || [];
+    const bnUsers = conversation?.banned_users || [];
+    users.concat(bnUsers).forEach((u: UserDocument) => {
+      const uSocket = socketsMap.get(`users-${u.id}`);
+      uSocket?.emit?.("onParticipentRemoveFromConversation", conversation);
     });
   })
 

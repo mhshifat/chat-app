@@ -114,21 +114,21 @@ export const ConversationService = {
   },
   async removeParticipentToConversation(body: AddParticipentToConversation, user: UserDocument) {
     const existingParticipent = await UserService.findAndThrowError({ id: body.participentId });
-    if (existingParticipent.id === user.id) throw new HttpError(400, "Please transfer the ownership of this conversation to leave the group!");
     const conversation = await Conversation
-      .createQueryBuilder("conversation")
-      .leftJoinAndSelect("conversation.creator", "creator")
-      .leftJoinAndSelect("conversation.banned_users", "banned_users")
-      .leftJoinAndSelect("conversation.muted_users", "muted_users")
-      .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
-      .leftJoinAndSelect("conversation.users", "user")
-      .where("conversation.id = :conversationId AND user.id IN (:...ids)", {
-        conversationId: body.conversationId,
-        ids: [body.participentId]
-      })
-      .leftJoinAndSelect("conversation.users", "users")
-      .getOne();
+    .createQueryBuilder("conversation")
+    .leftJoinAndSelect("conversation.creator", "creator")
+    .leftJoinAndSelect("conversation.banned_users", "banned_users")
+    .leftJoinAndSelect("conversation.muted_users", "muted_users")
+    .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
+    .leftJoinAndSelect("conversation.users", "user")
+    .where("conversation.id = :conversationId AND user.id IN (:...ids)", {
+      conversationId: body.conversationId,
+      ids: [body.participentId]
+    })
+    .leftJoinAndSelect("conversation.users", "users")
+    .getOne();
     if (!conversation) throw new HttpError(400, "Could not remove participent from the conversation!");
+    if (existingParticipent.id === conversation.creator.id) throw new HttpError(400, "Please transfer the ownership of this conversation to leave the group!");
     conversation.users = conversation.users.filter(u => String(u.id) !== String(body.participentId));
     await conversation.save();
     return conversation;

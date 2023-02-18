@@ -24,7 +24,7 @@ export const ConversationController = {
       conversationId: req.body.conversationId,
       participentId: req.params.id
     }, req.currentUser!);
-    eventEmitter.emit("onParticipentAddToConversationCreate", doc);
+    eventEmitter.emit("onParticipentRemoveFromConversation", doc);
     return RequestResponse.setResponse(res).setStatusCode(200).setData(doc).success();
   },
   async banParticipentToConversation(req: Request<{ id: string }, any, { conversationId: string }>, res: Response, next: NextFunction) {

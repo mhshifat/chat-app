@@ -93,7 +93,7 @@ export default function ChatMessagesHolderInput({}: ChatMessagesHolderInputProps
 		}) => {
 			if (String(conversation.id) !== String(id)) return;
 			if (conversation.type === "private") setTypingUsers([typingUser]);
-			else setTypingUsers((values) => [...values, typingUser]);
+			else setTypingUsers((values) => values.find(u => u.id === typingUser.id) ? values : [...values, typingUser]);
 		};
 		socketRef?.on("isTyping", handleUserTyping);
 		const handleUserTypingStoped = ({
