@@ -29,7 +29,7 @@ export interface UpdateMessageFormValues {
 export default function ChatMessagesHolderInput({}: ChatMessagesHolderInputProps) {
 	const { id } = useParams();
 	const socket = useSocket();
-	const inputRef = useRef<HTMLInputElement>(null);
+	const inputRef = useRef<HTMLTextAreaElement>(null);
 	const functionsRef = useRef({
 		socket,
 	});
@@ -125,11 +125,20 @@ export default function ChatMessagesHolderInput({}: ChatMessagesHolderInputProps
 					<AiOutlinePlus />
 				</li>
 				<li>
-					<input
+					<textarea
             ref={inputRef}
-						type="text"
+            rows={1}
 						placeholder="Send Message to #"
-						onKeyUp={({ currentTarget, key }) => {
+            onInput={(e) => {
+              e.currentTarget.style.height = "auto";
+              e.currentTarget.style.height = e.currentTarget.value.length ? e.currentTarget.scrollHeight + "px" : "auto";
+              
+              // const inputField = inputRef.current!;
+              // const newlines = inputField.value.match(/\n/g)||[];
+              // console.log({ newlines });
+              // inputField.rows = newlines.length + 1;
+            }}
+						onKeyUp={({ currentTarget, key, shiftKey }) => {
 							socket?.emit("isTyping", {
 								typingUser: user,
 								toUsers:
@@ -153,9 +162,10 @@ export default function ChatMessagesHolderInput({}: ChatMessagesHolderInputProps
 								setTimer(timeout);
 							}
 
-							if (key === "Enter") {
-                sendMessage(currentTarget.value);
-								currentTarget.value = "";
+							if (key === "Enter" && !shiftKey) {
+                if (currentTarget.value.trim().length) sendMessage(currentTarget.value);
+                currentTarget.value = "";
+                currentTarget.style.height = "auto";
 							}
               if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(key)) {
                 setCursorPosition(currentTarget.selectionStart ?? currentTarget.value.length);

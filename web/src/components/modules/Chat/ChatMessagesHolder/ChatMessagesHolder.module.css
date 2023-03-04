@@ -66,6 +66,8 @@
   height: 100%;
   border-radius: var(--radius);
   overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .chatMessagesHolderInput > li:nth-child(2) > input::placeholder,
@@ -79,6 +81,29 @@
   font-weight: 500;
   line-height: 1.5;
   color: var(--secondaryTextColor);
+  font-family: 'Inter', sans-serif;
+}
+
+.chatMessagesHolderInput > li:nth-child(2) > textarea::placeholder,
+.chatMessagesHolderInput > li:nth-child(2) > textarea {
+  width: 100%;
+  height: auto;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--secondaryTextColor);
+  resize: none;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.chatMessagesHolderInput > li:nth-child(2) > textarea {
+  padding: .5em 1em;
 }
 
 .chatMessagesHolderInput > li:nth-child(2) > input {
@@ -159,6 +184,7 @@
   font-size: 1.4rem;
   line-height: 1.4;
   font-weight: normal;
+  white-space: pre-wrap;
 }
 
 .chatMessagesHolderMultiMessage > span > p + p {
